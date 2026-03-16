@@ -1,40 +1,14 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from "react"
-import {marked} from "marked"
+import {
+  AssistantMessage,
+  StreamingMessage,
+  SystemMessage,
+  UserMessage
+} from "~/js/components/Messages"
 import ModelSelect from "~/js/components/ModelSelect"
 import ProviderSelect from "~/js/components/ProviderSelect"
 import useModels from "~/js/hooks/useModels"
 import useWebSocket from "~/js/hooks/useWebSocket"
-
-const origin = window.location.origin
-
-const stripImages = (markdown) => {
-  return markdown
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, (_match, alt) => {
-      return `\n\n> [image${alt ? `: ${alt}` : ""} loading]\n\n`
-    })
-    .replace(/<img\b[^>]*alt=(['"])(.*?)\1[^>]*>/gi, (_match, _quote, alt) => {
-      return `\n\n> [image${alt ? `: ${alt}` : ""} loading]\n\n`
-    })
-    .replace(/<img\b[^>]*>/gi, "\n\n> [image loading]\n\n")
-}
-
-const render = (markdown, {images = true} = {}) => {
-  const content = images ? markdown : stripImages(markdown)
-  return marked.parse(content.replaceAll("sandbox:/", `${origin}/`))
-}
-
-const AssistantMessage = React.memo(function AssistantMessage({markdown}) {
-  return (
-    <div className="mt-3 flex first:mt-0">
-      <div
-        className="max-w-[85%] rounded-3xl rounded-bl-lg bg-white px-4 py-3 text-zinc-900 shadow-sm ring-1 ring-zinc-200"
-        dangerouslySetInnerHTML={{
-          __html: `<div class="assistant-content max-w-none whitespace-normal [&_p]:my-0 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:bg-zinc-100 [&_pre]:p-3 [&_code]:font-mono [&_blockquote]:border-l-4 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:text-zinc-600 [&_img]:mt-2 [&_img]:h-auto [&_img]:max-h-[32rem] [&_img]:w-full [&_img]:max-w-2xl [&_img]:rounded-2xl [&_img]:object-contain">${render(markdown)}</div>`
-        }}
-      />
-    </div>
-  )
-})
 
 export default function App() {
   const [message, setMessage] = useState("")
@@ -88,36 +62,13 @@ export default function App() {
           className="min-h-0 flex-1 overflow-y-auto rounded-3xl border border-zinc-200 bg-zinc-50 p-4 text-[15px] leading-7 shadow-sm"
         >
           {entries.map((entry, index) => {
-            if (entry.kind === "assistant") {
+            if (entry.kind === "assistant")
               return <AssistantMessage key={index} markdown={entry.markdown} />
-            }
-
-            if (entry.kind === "user") {
-              return (
-                <div key={index} className="mt-3 flex justify-end first:mt-0">
-                  <div className="max-w-[75%] rounded-3xl rounded-br-lg bg-zinc-900 px-4 py-3 text-white shadow-sm">
-                    {entry.text}
-                  </div>
-                </div>
-              )
-            }
-
-            return (
-              <div key={index} className="mt-3 text-center text-xs text-zinc-500 first:mt-0">
-                {entry.text}
-              </div>
-            )
+            if (entry.kind === "user")
+              return <UserMessage key={index} text={entry.text} />
+            return <SystemMessage key={index} text={entry.text} />
           })}
-          {streaming ? (
-            <div className="mt-3 flex">
-              <div
-                className="max-w-[85%] rounded-3xl rounded-bl-lg bg-white px-4 py-3 text-zinc-900 shadow-sm ring-1 ring-zinc-200"
-                dangerouslySetInnerHTML={{
-                  __html: `<div class="assistant-content max-w-none whitespace-normal [&_p]:my-0 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:bg-zinc-100 [&_pre]:p-3 [&_code]:font-mono [&_blockquote]:border-l-4 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:text-zinc-600">${render(streaming, {images: false})}</div>`
-                }}
-              />
-            </div>
-          ) : null}
+          {streaming ? <StreamingMessage markdown={streaming} /> : null}
         </div>
         <p className="text-center text-sm text-zinc-500">
           Status: <span className="font-semibold text-zinc-700">{status}</span>
