@@ -1,9 +1,12 @@
 ## About
 
-EasyTalk is a small chat app built with [llm.rb](https://github.com/llmrb/llm.rb).
+RealTalk is a small chat app built with [llm.rb](https://github.com/llmrb/llm.rb).
 It demonstrates streaming over WebSockets, tool calls, provider switching, and
 model selection in a simple Rack app with a small React frontend. See the
-[Screencast](#screencast) for a demo, and enjoy :)
+[Screencast](#screencast) for a demo. For the story behind the name, check out
+[2Pac – Real Talk](https://www.youtube.com/watch?v=_3LuY9isL_Y).
+
+Enjoy :)
 
 ## Features
 
@@ -17,8 +20,8 @@ model selection in a simple Rack app with a small React frontend. See the
 ## Screencast
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=FsSn7KuWY8o">
-    <img src="https://img.youtube.com/vi/FsSn7KuWY8o/maxresdefault.jpg" alt="Watch the EasyTalk demo on YouTube">
+  <a href="https://www.youtube.com/watch?v=cH9LvRAiHVk">
+    <img src="https://img.youtube.com/vi/cH9LvRAiHVk/maxresdefault.jpg" alt="Watch the RealTalk demo on YouTube">
   </a>
 </p>
 
@@ -60,9 +63,9 @@ bundle exec rake serve
 
 ## Sources
 
-* [GitHub.com](https://github.com/llmrb/easytalk)
-* [GitLab.com](https://gitlab.com/llmrb/easytalk)
-* [Codeberg.org](https://codeberg.org/llmrb/easytalk)
+* [GitHub.com](https://github.com/llmrb/realtalk)
+* [GitLab.com](https://gitlab.com/llmrb/realtalk)
+* [Codeberg.org](https://codeberg.org/llmrb/realtalk)
 
 ## License
 

@@ -6,7 +6,7 @@ module.exports = {
   entry: path.resolve(__dirname, "js/index.js"),
   output: {
     path: path.resolve(__dirname, "..", "..", "public", "js"),
-    filename: "easytalk.js",
+    filename: "realtalk.js",
     clean: false
   },
   devtool: "source-map",

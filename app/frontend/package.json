@@ -1,5 +1,5 @@
 {
-  "name": "easytalk",
+  "name": "realtalk",
   "private": true,
   "scripts": {
     "build": "webpack",
