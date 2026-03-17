@@ -52,11 +52,13 @@ export default function App () {
     <main className='h-screen bg-white font-sans text-zinc-900'>
       <div className='mx-auto flex h-full min-h-0 w-full max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6'>
         <header className='pb-1 text-center'>
-          <img
-            className='mx-auto max-h-16 w-auto max-w-xs rounded-2xl'
-            src='/images/realtalk.png'
-            alt='RealTalk'
-          />
+          <a target='_blank' rel='noopener noreferrer' href='https://www.youtube.com/watch?v=_3LuY9isL_Y'>
+            <img
+              className='mx-auto max-h-16 w-auto max-w-xs rounded-2xl'
+              src='/images/realtalk.png'
+              alt='RealTalk'
+            />
+          </a>
         </header>
         <div
           id='stream'
