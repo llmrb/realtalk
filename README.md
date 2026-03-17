@@ -17,14 +17,6 @@ Enjoy :)
 - 🛠️ Add your own tools: see [app/tools/](app/tools)
 - 🖼️ Image generation via [create_image.rb](./app/tools/create_image.rb) - requires Gemini, OpenAI or xAI but works with any provider
 
-## Screencast
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=cH9LvRAiHVk">
-    <img src="https://img.youtube.com/vi/cH9LvRAiHVk/maxresdefault.jpg" alt="Watch the RealTalk demo on YouTube">
-  </a>
-</p>
-
 ## Usage
 
 **Secrets**
@@ -60,6 +52,13 @@ Start the server:
 ```sh
 bundle exec rake serve
 ```
+
+## Screencast
+
+Watch the screencast [on YouTube](https://www.youtube.com/watch?v=cH9LvRAiHVk). I'm not particularly
+good at screencasts (this was my second one) but I tried to keep it fun and informative at the
+same time. I clearly need to work on my screencast skills :)
+
 
 ## Sources
 
