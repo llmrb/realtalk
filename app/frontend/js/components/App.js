@@ -52,6 +52,7 @@ export default function App () {
 
   const onProviderChange = (event) => {
     setProvider(event.target.value)
+    setModel('')
     setCost('')
   }
 
