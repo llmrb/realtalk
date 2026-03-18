@@ -74,7 +74,7 @@ export default function App () {
         <aside className='hidden shrink-0 lg:flex lg:w-56 lg:flex-col lg:items-center lg:gap-4 lg:pt-2'>
           <a target='_blank' rel='noopener noreferrer' href='https://www.youtube.com/watch?v=CyzdOtyYnng'>
             <img
-              className='max-h-16 w-auto max-w-[11rem] rounded-2xl'
+              className='max-h-16 w-auto max-w-[11rem] rounded-2xl [animation:spin_1.5s_linear_1]'
               src='/images/realtalk.png'
               alt='RealTalk'
             />
