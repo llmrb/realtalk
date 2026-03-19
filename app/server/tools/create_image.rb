@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Server::Tool
-  class CreateImage < LLM::Tool
+  class CreateImage < Base
     name "create-image"
     description "Create a generated image"
     param :prompt, String, "The prompt", required: true
@@ -15,11 +15,11 @@ module Server::Tool
       key  = ENV["#{provider.upcase}_SECRET"]
       llm  = LLM.method(provider).call(key:)
       res  = llm.images.create(prompt:, n:)
-      res.images.each do |image|
+      res.images.map do |image|
         file = "#{SecureRandom.hex}.png"
         IO.copy_stream image, File.join(images_dir, file)
+        { directions: 'embed the html in your response exactly as it appears', html: "<img src='/g/#{file}'>" }
       end
-      { directions: 'embed the html in your response exactly as it appears', html: "<img src='/g/#{file}'>" }
     rescue LLM::RateLimitError => ex
       { error: ex.class.to_s, message: "rate limit reached" }
     rescue => ex
@@ -28,7 +28,11 @@ module Server::Tool
 
     private
 
-    def project_root = File.realpath(File.join(__dir__, "..", ".."))
-    def images_dir = File.join(project_root, "public", "g")
+    ##
+    # Returns the directory where images are stored
+    # @return [String]
+    def images_dir
+      File.join(root, "public", "g")
+    end
   end
 end
