@@ -2,8 +2,8 @@
 
 RealTalk is a small chat app built with [llm.rb](https://github.com/llmrb/llm.rb).
 It demonstrates streaming over WebSockets, tool calls, image generation,
-provider switching, and model selection in a simple Rack app with a
-small React frontend. See the [Screencast](#screencast) for a demo.
+provider switching, and model selection with a small React client and a
+simple Rack backend. See the [Screencast](#screencast) for a demo.
 
 Enjoy :)
 
@@ -46,14 +46,14 @@ bundle install
 
 **Development**
 
-Run the backend and webpack dev server in separate shells:
+Run the server and webpack dev server in separate shells:
 
 ```sh
-bundle exec rake dev:backend
-bundle exec rake dev:frontend
+bundle exec rake dev:server
+bundle exec rake dev:client
 ```
 
-Then open `http://localhost:9293`. The Ruby backend on `9292` only
+Then open `http://localhost:9293`. The Ruby server on `9292` only
 serves `/models` and `/ws`.
 
 Or run both processes together with Foreman:

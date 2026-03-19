@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-dir = File.join(__dir__, "app", "frontend")
+dir = File.join(__dir__, "app", "client")
 
-desc "Build the frontend"
+desc "Build the client"
 task build: %i[npm:build]
 
 namespace :dev do
-  desc "Serve the backend without rebuilding frontend assets"
-  task :backend do
+  desc "Serve the server without rebuilding client assets"
+  task :server do
     sh "env $(cat .env) " \
        "bundle exec falcon serve --bind http://0.0.0.0:9292"
   end
 
-  desc "Run webpack-dev-server for the frontend"
-  task frontend: %i[npm:i] do
+  desc "Run webpack-dev-server for the client"
+  task client: %i[npm:i] do
     Dir.chdir(dir) do
       sh "npm run dev"
     end
@@ -21,7 +21,7 @@ namespace :dev do
 end
 
 namespace :npm do
-  desc "Build the frontend"
+  desc "Build the client"
   task build: %i[npm:i] do
     Dir.chdir(dir) do
       sh "npx webpack build"

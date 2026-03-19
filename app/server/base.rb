@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module API
+module Server
   class Base
     ##
     # @return [Rack::Request]
@@ -17,7 +17,7 @@ module API
     #  The Rack env
     # @param [Hash<String,LLM::Provider>] llms
     #  A hashmap of LLM::Provider objects
-    # @return [Controller::Base]
+    # @return [Server::Base]
     def initialize(env, llms)
       @request = Rack::Request.new(env)
       @params = request.params

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class API::Websocket
+class Server::Websocket
   module Connection
     ##
     # Establishes the WebSocket connection and handles incoming messages

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class API::Websocket < API::Base
+class Server::Websocket < Server::Base
   require_relative "websocket/connection"
   require_relative "websocket/stream"
   include Connection

@@ -1,2 +1,2 @@
-backend: bundle exec rake dev:backend
-frontend: bundle exec rake dev:frontend
+server: bundle exec rake dev:server
+client: bundle exec rake dev:client

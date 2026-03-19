@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class API::Websocket
+class Server::Websocket
   class Stream
     def initialize(conn, sock)
       @conn = conn
