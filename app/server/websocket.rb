@@ -17,14 +17,10 @@ class Server::Websocket < Server::Base
   private
 
   def upgrade_required
-    [
-      426,
-      {
-        "content-type" => "text/plain",
-        "upgrade" => "websocket"
-      },
-      ["Expected a WebSocket upgrade request\n"]
-    ]
+    response.status = 426
+    response["content-type"] = "text/plain"
+    response["upgrade"] = "websocket"
+    "Expected a WebSocket upgrade request\n"
   end
 
   def tool_status(functions)

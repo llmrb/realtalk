@@ -3,25 +3,11 @@
 module Server
   class Base
     ##
-    # @return [Rack::Request]
-    #  The current Rack request
-    attr_reader :request
-
-    ##
-    # @return [Hash]
-    #  The request params
-    attr_reader :params
-
-    ##
     # @param [Hash] env
     #  The Rack env
-    # @param [Hash<String,LLM::Provider>] llms
-    #  A hashmap of LLM::Provider objects
     # @return [Server::Base]
-    def initialize(env, llms)
-      @request = Rack::Request.new(env)
-      @params = request.params
-      @llms = llms
+    def initialize(roda)
+      @roda = roda
     end
 
     ##
@@ -42,7 +28,7 @@ module Server
     # @return [LLM::Provider]
     #  The selected provider object
     def llm
-      @llms[provider] || @llms["openai"]
+      llms[provider] || llms["openai"]
     end
 
     ##
@@ -50,6 +36,33 @@ module Server
     #  Returns the root path
     def root
       @root ||= File.join __dir__, "..", ".."
+    end
+
+    def params
+      request.params
+    end
+
+    ##
+    # @return [Hash<String,LLM::Provider>]
+    #  A hashmap of initialized LLM::Provider objects
+    def llms
+      @llms ||= {
+        "openai" => LLM.openai(key: ENV["OPENAI_SECRET"]),
+        "gemini" => LLM.gemini(key: ENV["GEMINI_SECRET"]),
+        "anthropic" => LLM.anthropic(key: ENV["ANTHROPIC_SECRET"]),
+        "deepseek" => LLM.deepseek(key: ENV["DEEPSEEK_SECRET"]),
+        "xai" => LLM.xai(key: ENV["XAI_SECRET"])
+      }.transform_values(&:persist!)
+    end
+
+    ##
+    # Delegate missing methods to the Roda instance
+    def method_missing(name, *args, &block)
+      if @roda.respond_to?(name)
+        @roda.send(name, *args, &block)
+      else
+        super
+      end
     end
   end
 end
