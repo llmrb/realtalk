@@ -47,15 +47,7 @@ module.exports = {
     host: "0.0.0.0",
     port: 9293,
     allowedHosts: "all",
-    static: [
-      {
-        directory: __dirname
-      },
-      {
-        directory: path.resolve(__dirname, "..", "..", "public", "g"),
-        publicPath: "/g"
-      }
-    ],
+    static: [{directory: __dirname}],
     client: {
       webSocketURL: {
         pathname: "/webpack"
