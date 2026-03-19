@@ -76,9 +76,9 @@ class API::Websocket
     # @return [void]
     def invoke(sess, functions, conn)
       while functions.any?
-        functions = sess.functions
         write(conn, event: "status", message: tool_status(functions))
         sess.talk functions.map(&:call)
+        functions = sess.functions
       end
     end
   end
