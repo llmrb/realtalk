@@ -17,7 +17,6 @@ export default function useModels ({ session, setSession }) {
   const receive = (payload) => {
     setModels(payload)
     setLoading(false)
-    setSession((prev) => ({...prev, model: payload[0].id}))
     return payload
   }
 
@@ -38,6 +37,27 @@ export default function useModels ({ session, setSession }) {
       .then(receive)
       .catch(onError)
     return () => controller.abort()
+  }, [session.provider])
+
+  useEffect(() => {
+    const setDefault = (model) => setSession((prev) => ({...prev, model}))
+    switch(session.provider) {
+      case 'openai':
+        setDefault('gpt-5.2')
+        break
+      case 'google':
+        setDefault('gemini-2.5-pro')
+        break
+      case 'anthropic':
+        setDefault('claude-sonnet-4-20250514')
+        break
+      case 'deepseek':
+        setDefault('deepseek-chat')
+        break
+      case 'xai':
+        setDefault('grok-3')
+        break
+    }
   }, [session.provider])
 
   return {
