@@ -20,13 +20,27 @@ import {
 import { useModels, useWebSocket } from '~/js/hooks'
 
 export default function App () {
+  const defaults = {
+    provider: 'deepseek', model: '', cost: '',
+    contextWindow: '', contextWindowUsage: ''
+  }
+  const resetState = { cost: '', contextWindow: '', contextWindowUsage: '' }
+
   const [message, setMessage] = useState('')
-  const [session, setSession] = useState({ provider: 'deepseek', model: '', cost: '' })
+  const [session, setSession] = useState(defaults)
   const { loading: modelsLoading, models } = useModels({ session, setSession })
   const { entries, send, status, stream } = useWebSocket({session, setSession})
 
   const streamRef = useRef(null)
   const inputRef = useRef(null)
+
+  const onProviderChange = (event) => {
+    setSession((prev) => ({...prev, ...resetState, provider: event.target.value, model: ''}))
+  }
+
+  const onModelChange = (event) => {
+    setSession((prev) => ({...prev,...resetState,model: event.target.value}))
+  }
 
   const scrollToBottom = () => {
     const stream = streamRef.current
@@ -38,14 +52,6 @@ export default function App () {
     const text = message.trim()
     if (!text) return false
     if (send(text)) setMessage('')
-  }
-
-  const onProviderChange = (event) => {
-    setSession((prev) => ({...prev, provider: event.target.value, model: '', cost: ''}))
-  }
-
-  const onModelChange = (event) => {
-    setSession((prev) => ({...prev, model: event.target.value, cost: ''}))
   }
 
   useLayoutEffect(() => {
@@ -72,17 +78,6 @@ export default function App () {
     input.style.height = '0px'
     input.style.height = `${Math.min(input.scrollHeight, 240)}px`
   }, [message])
-
-  useEffect(() => {
-    switch(session.provider) {
-      case 'openai':
-        setSession((prev) => ({...prev, model: 'gpt-5.4'}))
-        break;
-      case 'gemini':
-        setSession((prev) => ({...prev, model: 'gemini-pro-latest'}))
-        break;
-    }
-  }, [session.provider])
 
   return (
     <main className='h-screen bg-white font-sans text-zinc-900'>
