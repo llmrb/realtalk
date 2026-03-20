@@ -36,6 +36,7 @@ GOOGLE_SECRET=...
 ANTHROPIC_SECRET=...
 DEEPSEEK_SECRET=...
 XAI_SECRET=...
+REDIS_URL=
 ```
 
 **Packages**
@@ -81,10 +82,11 @@ The SQLite database files under `db/` are local-only and ignored by git.
 
 **Development**
 
-Run the server and webpack dev server in separate shells:
+Run the server, Sidekiq, and webpack dev server in separate shells:
 
 ```sh
 bundle exec rake dev:server
+bundle exec rake dev:sidekiq
 bundle exec rake dev:client
 ```
 
@@ -95,7 +97,7 @@ The webpack dev server proxies `/models`, `/ws`, and `/g` back to the
 Ruby server, so image generation works in development without building
 the client bundle first.
 
-Or run both processes together with Foreman:
+Or run all three processes together with Foreman:
 
 ```sh
 bundle exec foreman start

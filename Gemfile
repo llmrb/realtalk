@@ -12,6 +12,7 @@ gem "rake"
 gem "rack"
 gem "roda"
 gem "rackup"
+gem "sidekiq"
 gem "sqlite3"
 gem "standalone_migrations"
 
