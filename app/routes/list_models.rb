@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Server::Routes
+module Relay::Routes
   class ListModels < Base
     ##
     # Returns the chat-capable models for the provider

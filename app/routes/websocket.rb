@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module Server::Routes
+module Relay::Routes
   class Websocket < Base
     require_relative "websocket/connection"
     require_relative "websocket/stream"
 
     include Connection
-    include Server::Tools
+    include Relay::Tools
 
     def call
       Async::WebSocket::Adapters::Rack.open(request.env) do |conn|
@@ -36,7 +36,7 @@ module Server::Routes
     end
 
     def instructions
-      File.read File.join(root, "app", "server", "prompts", "system.md")
+      File.read File.join(root, "app", "prompts", "system.md")
     end
 
     def initial_prompt(message)

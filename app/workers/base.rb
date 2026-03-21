@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Server
+module Relay
   module Workers
     class Base
       include Sidekiq::Worker

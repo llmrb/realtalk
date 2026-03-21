@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class Server::Router < Roda
+class Relay::Router < Roda
   ##
   # Plugins
   plugin :common_logger
   plugin :partials,
     escape: true,
     layout: "layout",
-    views: File.expand_path("views", __dir__)
+    views: File.expand_path("../views", __dir__)
 
   ##
   # Routes
@@ -41,7 +41,7 @@ class Server::Router < Roda
   end
 
   private
-  include Server::Routes
+  include Relay::Routes
   def page(name, **locals)
     view(File.join("pages", name), layout_opts: {locals:})
   end

@@ -2,7 +2,7 @@
 
 require "protocol/websocket/message"
 
-class Server::Routes::Websocket
+class Relay::Routes::Websocket
   module Connection
     ##
     # Establishes the WebSocket connection and handles incoming messages

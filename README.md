@@ -2,9 +2,9 @@
 
 Relay is a small chat app built with [llm.rb](https://github.com/llmrb/llm.rb).
 It demonstrates streaming over WebSockets, tool calls, image generation,
-provider switching, model selection, and a small Active Record-backed
-server. The app renders HTML from `app/server/views`, and the Rack
-server lives under `app/server`. See the [Screencast](#screencast) for a
+provider switching, model selection, and a small Sequel-backed
+server. The app renders HTML from `app/views`, and the Rack
+server lives under `app`. See the [Screencast](#screencast) for a
 demo.
 
 Enjoy :)
@@ -18,12 +18,12 @@ Watch the screencast on [YouTube](https://youtu.be/fOvAFq7ITiE).
 ## Features
 
 - ⚙️ Rack application built with Falcon, Roda, and async-websocket
-- 🗃️ Active Record with standalone migrations
+- 🗃️ Sequel with built-in migrations
 - 🌊 Streaming chat over WebSockets
 - 🔀 Switch providers: OpenAI, Gemini, Anthropic, xAI and DeepSeek
 - 🧠 Switch models: varies by provider
-- 🛠️ Add your own tools: see [app/server/tools/](app/server/tools)
-- 🖼️ Image generation via [create_image.rb](./app/server/tools/create_image.rb) - requires Gemini, OpenAI or xAI but works with any provider
+- 🛠️ Add your own tools: see [app/tools/](app/tools)
+- 🖼️ Image generation via [create_image.rb](./app/tools/create_image.rb) - requires Gemini, OpenAI or xAI but works with any provider
 
 ## Usage
 
@@ -53,7 +53,7 @@ bundle install
 Create a migration:
 
 ```sh
-bundle exec rake db:new_migration name=create_widgets
+bundle exec rake "db:new_migration[create_widgets]"
 ```
 
 Run migrations:
@@ -62,18 +62,18 @@ Run migrations:
 bundle exec rake db:migrate
 ```
 
-Models live in `app/server/models`, and the app boots Active Record from
+Models live in `app/models`, and the app boots Sequel from
 `db/config.yml`.
 
 The SQLite database files under `db/` are local-only and ignored by git.
 
 **Server Layout**
 
-- `app/server/models` contains Active Record models
-- `app/server/routes` contains the Roda-facing endpoints
-- `app/server/tools` contains LLM tool classes
-- `app/server/views` contains the HTML templates and HTMX fragments
-- `app/server/router.rb` dispatches `/api/models`, `/api/tools`, and
+- `app/models` contains Sequel models
+- `app/routes` contains the Roda-facing endpoints
+- `app/tools` contains LLM tool classes
+- `app/views` contains the HTML templates and HTMX fragments
+- `app/init/router.rb` dispatches `/api/models`, `/api/tools`, and
   `/api/ws`
 - `config.ru` serves generated images and static images from `public/`
   and boots the router
