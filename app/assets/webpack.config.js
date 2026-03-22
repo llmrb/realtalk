@@ -6,10 +6,10 @@ const production = process.env.NODE_ENV === "production"
 
 module.exports = {
   mode: production ? "production" : "development",
-  entry: path.resolve(root, "js/application.js"),
+  entry: path.resolve(root, "js/relay.js"),
   output: {
-    path: path.resolve(root, "..", "..", "..", "public", "js"),
-    filename: "application.js",
+    path: path.resolve(root, "..", "..", "public", "js"),
+    filename: "relay.js",
     clean: false,
     publicPath: "/js/"
   },

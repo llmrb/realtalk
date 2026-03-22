@@ -1,31 +1,32 @@
 ## About
 
-Relay is a small chat app built with [llm.rb](https://github.com/llmrb/llm.rb).
-It demonstrates streaming over WebSockets, tool calls, image generation,
-provider switching, model selection, and a small Sequel-backed
-server. The app renders HTML from `app/views`, and the Rack
-server lives under `app`. See the [Screencast](#screencast) for a
-demo.
-
-Enjoy :)
-
-## Screencast
-
-[![Watch the screencast](https://img.youtube.com/vi/fOvAFq7ITiE/maxresdefault.jpg)](https://youtu.be/fOvAFq7ITiE)
-
-Watch the screencast on [YouTube](https://youtu.be/fOvAFq7ITiE).
+Relay is an interactive [llm.rb](https://github.com/llmrb/llm.rb#readme)
+application built with HTMX, Roda, Falcon, and WebSockets. It serves
+as both a demo of [llm.rb](https://github.com/llmrb/llm.rb#readme) and
+an example of a Ruby-first architecture that keeps JavaScript light
+while still supporting background workers and a database-backed app.
 
 ## Features
 
+- 🌊 Streaming chat over WebSockets
+- 🛠️ Custom tool support via [app/tools/](app/tools)
+- 🖼️ Sample image-generation tool in [create_image.rb](./app/tools/create_image.rb)
 - ⚙️ Rack application built with Falcon, Roda, and async-websocket
 - 🗃️ Sequel with built-in migrations
-- 🌊 Streaming chat over WebSockets
-- 🔀 Switch providers: OpenAI, Gemini, Anthropic, xAI and DeepSeek
-- 🧠 Switch models: varies by provider
-- 🛠️ Add your own tools: see [app/tools/](app/tools)
-- 🖼️ Image generation via [create_image.rb](./app/tools/create_image.rb) - requires Gemini, OpenAI or xAI but works with any provider
+- 🧵 Sidekiq workers for background jobs
+- 🧰 Built-in task monitor that starts and supervises the full
+  development environment
 
-## Usage
+## Quick start
+
+**Setup**
+
+Redis is required for Sidekiq support.
+SQLite is required for database support.
+
+    bundle install
+    bundle exec rake db:migrate
+    bundle exec rake dev:start
 
 **Secrets**
 
@@ -39,56 +40,33 @@ DEEPSEEK_SECRET=...
 XAI_SECRET=...
 REDIS_URL=
 ```
+## Architecture
 
-**Packages**
+The architecture is intentionally simple. HTMX keeps the client light,
+while server-rendered HTML keeps the application comfortable for
+Ruby-focused developers. Background work is handled with Sidekiq, and
+development processes are coordinated by Relay's task monitor.
 
-Install Ruby gems:
+Some important notes:
 
-```sh
-bundle install
-```
+* The app boots from `app/init.rb`, which sets up the database,
+  autoloading, and application initialization.
+* HTTP routing is handled by Roda, with templates rendered from
+  `app/views` and static assets served from `public/`.
+* Webpack builds the JavaScript and CSS assets from `app/assets`.
 
-**Database**
+The codebase is organized by responsibility:
 
-Create a migration:
-
-```sh
-bundle exec rake "db:new_migration[create_widgets]"
-```
-
-Run migrations:
-
-```sh
-bundle exec rake db:migrate
-```
-
-Models live in `app/models`, and the app boots Sequel from
-`db/config.yml`.
-
-The SQLite database files under `db/` are local-only and ignored by git.
-
-**Server Layout**
-
+- `app/init` contains boot and framework setup
+- `app/tools` contains tools
+- `app/prompts` contains system prompt
 - `app/models` contains Sequel models
-- `app/routes` contains the Roda-facing endpoints
-- `app/tools` contains LLM tool classes
-- `app/views` contains the HTML templates and HTMX fragments
-- `app/init/router.rb` dispatches `/api/models`, `/api/tools`, and
-  `/api/ws`
-- `config.ru` serves generated images and static images from `public/`
-  and boots the router
-
-**Development**
-
-Run the full dev environment:
-
-```sh
-bundle exec rake dev:start
-```
-
-Then open `http://localhost:9292`. The Ruby server serves the HTML
-pages, `/api/models`, `/api/tools`, `/api/ws`, and generated images
-from `/g`.
+- `app/routes` contains route classes and WebSocket handlers
+- `app/views` contains HTML templates and partials
+- `app/workers` contains Sidekiq workers
+- `db/` contains database configuration and migrations
+- `tasks/` contains rake tasks for development, assets, and database work
+- `lib/relay` contains support code like the task monitor
 
 ## Sources
 

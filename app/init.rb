@@ -16,22 +16,10 @@ module Relay
   loader.push_dir(__dir__, namespace: self)
   loader.setup
 
-  ##
-  # Returns the root path of the application
-  # @return [String]
-  def self.root
-    @root ||= File.realpath File.join(__dir__, "..")
-  end
-
-  ##
-  # Returns the path to the public/ directory
-  # @return [String]
-  def self.public_dir
-    @public_dir ||= File.realpath File.join(root, "public")
-  end
-
   require_relative "../lib/relay"
   require_relative "init/database"
   require_relative "init/sidekiq"
   require_relative "init/router"
+
+  FileUtils.mkdir_p File.join(Relay.public_dir, "g")
 end
