@@ -6,6 +6,10 @@ as both a demo of [llm.rb](https://github.com/llmrb/llm.rb#readme) and
 an example of a Ruby-first architecture that keeps JavaScript light
 while still supporting background workers and a database-backed app.
 
+Relay serves as a reference implementation for building real-time,
+tool-enabled LLM applications with llm.rb in a production-style
+environment.
+
 ## Features
 
 - 🌊 Streaming chat over WebSockets
@@ -14,8 +18,7 @@ while still supporting background workers and a database-backed app.
 - ⚙️ Rack application built with Falcon, Roda, and async-websocket
 - 🗃️ Sequel with built-in migrations
 - 🧵 Sidekiq workers for background jobs
-- 🧰 Built-in task monitor that starts and supervises the full
-  development environment
+- 🧰 Built-in task monitor that that starts and supervises the full development environment (web, workers, assets)
 
 ## Quick start
 
