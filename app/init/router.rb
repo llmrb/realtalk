@@ -29,6 +29,10 @@ class Relay::Router < Roda
       r.is "set-model" do
         Settings::SetModel.new(self).call
       end
+
+      r.is "set-provider" do
+        Settings::SetProvider.new(self).call
+      end
     end
 
     r.on "api" do
@@ -40,6 +44,12 @@ class Relay::Router < Roda
     r.is "models" do
       r.get do
         ListModels.new(self).call
+      end
+    end
+
+    r.is "providers" do
+      r.get do
+        ListProviders.new(self).call
       end
     end
   end

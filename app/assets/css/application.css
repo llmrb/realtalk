@@ -143,4 +143,16 @@
   .field {
     @apply w-full rounded-2xl border border-stone-200 bg-white/90 px-3 py-3 text-zinc-700 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-500/10;
   }
+
+  .select-field {
+    @apply w-full appearance-none bg-transparent py-1 pr-8 pl-0 font-medium text-zinc-700 outline-none transition hover:text-zinc-900 focus:text-zinc-900;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23575569' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 0.1rem center;
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .select-field:hover {
+    @apply text-zinc-900;
+  }
 }

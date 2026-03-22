@@ -7,13 +7,13 @@ module Relay::Routes
     # @return [Array]
     def call
       cache.models = filter(llm.models.all)
-      partial("partials/models", {locals:})
+      partial("fragments/models", {locals:})
     end
 
     private
 
     def locals
-      {models: cache.models, current_model: session["model"]}
+      {models: cache.models}
     end
 
     def filter(models)

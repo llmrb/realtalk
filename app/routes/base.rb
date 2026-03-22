@@ -21,7 +21,7 @@ module Relay::Routes
     # @return [String,nil]
     #  The requested model
     def model
-      session["model"] || params["model"]
+      session["model"] || "deepseek-chat"
     end
 
     ##

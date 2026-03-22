@@ -14,7 +14,7 @@ module Relay::Routes
     end
 
     def locals
-      {models: cache.models, current_model: session["model"]}
+      {models: cache.models}
     end
   end
 end

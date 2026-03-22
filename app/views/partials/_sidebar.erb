@@ -1,5 +1,5 @@
 <aside class="hidden shrink-0 self-start lg:sticky lg:top-6 lg:flex lg:w-56 lg:flex-col lg:pt-2">
-  <div class="panel flex flex-col items-center gap-4 px-4 py-5">
+  <div class="panel flex flex-col items-center gap-10 px-4 py-5">
     <a
       href="https://www.youtube.com/watch?v=CyzdOtyYnng"
       target="_blank"
@@ -14,15 +14,15 @@
       >
     </a>
     <% if show_controls %>
-      <form class="flex w-full flex-col gap-3 text-sm text-stone-600">
-        <label class="flex flex-col gap-2">
+      <form class="flex w-full flex-col gap-6 text-sm text-stone-600">
+        <div id="providers-control" class="flex flex-col gap-2" hx-get="/providers" hx-trigger="load" hx-swap="outerHTML">
           <span class="label">Provider</span>
-          <select class="field">
-            <option>DeepSeek</option>
-          </select>
-        </label>
-        <span class="label">Models</span>
-        <label class="flex flex-col gap-2" hx-get="/models" hx-trigger="load"></label>
+          <div class="field text-zinc-400">Loading...</div>
+        </div>
+        <div id="models-control" class="flex flex-col gap-2" hx-get="/models" hx-trigger="load" hx-swap="outerHTML">
+          <span class="label">Model</span>
+          <div class="py-1 text-sm font-medium text-zinc-400">Loading...</div>
+        </div>
         <span class="text-center text-xs text-zinc-400">1 model</span>
       </form>
     <% end %>
