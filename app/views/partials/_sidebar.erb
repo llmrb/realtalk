@@ -14,14 +14,14 @@
       >
     </a>
     <% if show_controls %>
-      <form class="flex w-full flex-col gap-4 text-sm text-stone-600">
+      <form class="flex w-full flex-col gap-4 text-sm text-zinc-300">
         <div id="providers-control" class="flex flex-col gap-2" hx-get="/providers" hx-trigger="load" hx-swap="outerHTML">
           <span class="label">Provider</span>
-          <div class="field text-zinc-400">Loading...</div>
+          <div class="field text-zinc-500">Loading...</div>
         </div>
         <div id="models-control" class="flex flex-col gap-2" hx-get="/models" hx-trigger="load" hx-swap="outerHTML">
           <span class="label">Model</span>
-          <div class="py-1 text-sm font-medium text-zinc-400">Loading...</div>
+          <div class="py-1 text-sm font-medium text-zinc-500">Loading...</div>
         </div>
       </form>
     <% end %>

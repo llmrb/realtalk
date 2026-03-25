@@ -1,21 +1,32 @@
-<aside id="tools-list" class="panel w-full shrink-0 px-4 py-4 text-sm text-stone-600" hx-swap-oob="outerHTML">
+<aside id="tools-list" class="w-full shrink-0 text-sm text-zinc-300" hx-swap-oob="outerHTML">
   <div class="flex flex-col gap-3">
     <span class="label">Tools</span>
-    <ul class="divide-y divide-stone-200/80">
+    <ul class="divide-y divide-zinc-800">
       <% tools.each do |tool| %>
         <li class="py-2 first:pt-0 last:pb-0">
-          <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0">
-              <div class="text-sm font-semibold tracking-tight text-zinc-800"><%= tool.name %></div>
-              <div class="mt-0.5 text-[11px] leading-4 text-stone-500"><%= tool.description %></div>
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0 text-sm font-semibold tracking-tight text-zinc-100"><%= tool.name %></div>
+            <div class="group relative shrink-0">
+              <button
+                type="button"
+                class="rounded-full border border-zinc-700 bg-zinc-900 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-emerald-300 transition hover:border-emerald-500/50 hover:bg-zinc-800 hover:text-emerald-200 focus:border-emerald-500/50 focus:bg-zinc-800 focus:text-emerald-200 focus:outline-none"
+              >
+                Details
+              </button>
+              <div class="tooltip pointer-events-none absolute right-0 bottom-full z-20 mb-2 hidden w-[17rem] max-w-[17rem] border border-emerald-500/40 bg-zinc-950 px-4 py-3 text-left shadow-[0_18px_40px_rgba(0,0,0,0.35)] group-hover:block group-focus-within:block">
+                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-400/85">
+                  About
+                </div>
+                <div class="my-2 h-px bg-zinc-800"></div>
+                <div class="text-sm leading-6 text-zinc-200">
+                  <%= tool.description %>
+                </div>
+              </div>
             </div>
-            <span class="mt-0.5 shrink-0 rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-stone-500">
-              Tool
-            </span>
           </div>
         </li>
       <% end %>
     </ul>
-    <span class="text-[11px] text-stone-400"><%= tools.size %> tools available</span>
+    <span class="text-[11px] text-zinc-500"><%= tools.size %> tools available</span>
   </div>
 </aside>

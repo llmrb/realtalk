@@ -8,27 +8,23 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-stone-100 text-zinc-900 antialiased;
-    background-image:
-      radial-gradient(circle at top left, rgb(219 234 254 / 0.7), transparent 28rem),
-      radial-gradient(circle at top right, rgb(254 243 199 / 0.6), transparent 24rem),
-      linear-gradient(to bottom, rgb(250 250 249), rgb(245 245 244));
+    @apply min-h-screen bg-zinc-950 text-zinc-100 antialiased;
   }
 
   ::selection {
-    @apply bg-sky-200 text-zinc-900;
+    @apply bg-emerald-400/30 text-emerald-50;
   }
 }
 
 @layer components {
   .panel {
-    @apply rounded-3xl border border-stone-200/80 bg-white/85 shadow-sm backdrop-blur-sm;
+    @apply rounded-3xl border border-zinc-800/90 bg-zinc-900/80 shadow-[0_18px_40px_rgba(0,0,0,0.32)] backdrop-blur-sm;
   }
 
   .scrollbar-chat {
     scrollbar-gutter: stable;
     scrollbar-width: thin;
-    scrollbar-color: #93c5fd transparent;
+    scrollbar-color: #22c55e transparent;
   }
 
   .scrollbar-chat::-webkit-scrollbar {
@@ -40,14 +36,14 @@
   }
 
   .scrollbar-chat::-webkit-scrollbar-thumb {
-    background: #93c5fd;
+    background: #22c55e;
     border: 1px solid transparent;
     border-radius: 9999px;
     background-clip: content-box;
   }
 
   .scrollbar-chat::-webkit-scrollbar-thumb:hover {
-    background: #60a5fa;
+    background: #4ade80;
     border: 1px solid transparent;
     background-clip: content-box;
   }
@@ -69,11 +65,11 @@
   }
 
   .assistant-content a {
-    @apply font-medium text-blue-600 underline decoration-blue-600 underline-offset-3;
+    @apply font-medium text-cyan-300 underline decoration-cyan-300 underline-offset-3;
   }
 
   .assistant-content a:hover {
-    @apply text-blue-700 decoration-blue-700;
+    @apply text-cyan-200 decoration-cyan-200;
   }
 
   .assistant-content ul {
@@ -89,7 +85,7 @@
   }
 
   .assistant-content pre {
-    @apply my-4 overflow-x-auto rounded-2xl border border-sky-100 bg-sky-50/80 p-3;
+    @apply my-4 overflow-x-auto rounded-2xl border border-zinc-800 bg-zinc-950/90 p-3;
   }
 
   .assistant-content code {
@@ -97,7 +93,7 @@
   }
 
   .assistant-content pre code.hljs {
-    @apply block rounded-xl bg-sky-50/80 p-0 text-[13px] leading-6 text-zinc-800;
+    @apply block rounded-xl bg-zinc-950/90 p-0 text-[13px] leading-6 text-zinc-100;
   }
 
   .assistant-content .hljs-keyword,
@@ -106,30 +102,30 @@
   .assistant-content .hljs-section,
   .assistant-content .hljs-built_in,
   .assistant-content .hljs-type {
-    @apply text-blue-700;
+    @apply text-cyan-300;
   }
 
   .assistant-content .hljs-string,
   .assistant-content .hljs-attr,
   .assistant-content .hljs-template-tag,
   .assistant-content .hljs-template-variable {
-    @apply text-emerald-700;
+    @apply text-emerald-300;
   }
 
   .assistant-content .hljs-number,
   .assistant-content .hljs-literal,
   .assistant-content .hljs-symbol,
   .assistant-content .hljs-bullet {
-    @apply text-amber-700;
+    @apply text-amber-300;
   }
 
   .assistant-content .hljs-comment,
   .assistant-content .hljs-quote {
-    @apply text-stone-500 italic;
+    @apply text-zinc-500 italic;
   }
 
   .assistant-content blockquote {
-    @apply my-4 border-l-4 border-amber-300 pl-4 text-stone-600;
+    @apply my-4 border-l-4 border-emerald-500/70 pl-4 text-zinc-300;
   }
 
   .assistant-content img {
@@ -137,22 +133,31 @@
   }
 
   .label {
-    @apply block text-[11px] font-semibold uppercase tracking-[0.14em] text-stone-500;
+    @apply block text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-400/80;
   }
 
   .field {
-    @apply w-full rounded-2xl border border-stone-200 bg-white/90 px-3 py-3 text-zinc-700 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-500/10;
+    @apply w-full rounded-2xl border border-zinc-800 bg-zinc-950/90 px-3 py-3 text-zinc-200 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10;
   }
 
   .select-field {
-    @apply w-full appearance-none border-b border-stone-200 bg-transparent py-1 pr-8 pl-0 font-medium text-zinc-700 outline-none transition hover:border-stone-300 hover:text-zinc-900 focus:border-sky-400 focus:text-zinc-900;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23575569' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    @apply w-full appearance-none border-b border-zinc-800 bg-transparent py-1 pr-8 pl-0 font-medium text-zinc-200 outline-none transition hover:border-zinc-700 hover:text-zinc-50 focus:border-emerald-500 focus:text-zinc-50;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%2394a3b8' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-position: right 0.1rem center;
     background-repeat: no-repeat;
     background-size: 1rem 1rem;
   }
 
   .select-field:hover {
-    @apply text-zinc-900;
+    @apply text-zinc-50;
   }
+
+  .tooltip {
+    @apply text-xs leading-5 text-zinc-200;
+  }
+
+  .playing-notice {
+    @apply my-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-200 shadow-[0_12px_30px_rgba(0,0,0,0.18)];
+  }
+
 }
