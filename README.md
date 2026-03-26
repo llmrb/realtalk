@@ -25,18 +25,6 @@ keeping the frontend light and the architecture Ruby-centric.
 - 📚 Sample knowledge tool in [relay_knowledge.rb](./app/tools/relay_knowledge.rb)
 - 🎵 Sample jukebox tool in [juke_box.rb](./app/tools/juke_box.rb)
 
-The example tools show useful patterns for building LLM developer
-workflows: delegating work to external providers, exposing
-documentation-backed knowledge, and rendering tool output directly in
-the chat UI.
-
-The jukebox tool gives the LLM a small built-in playlist. It can use
-`juke_box.rb` to pick a track and show a playable embed in the chat UI.
-
-Relay can also connect to MCP servers over stdio. MCP-provided tools
-are started with the WebSocket session and exposed to the model
-alongside Relay's built-in tools.
-
 ### Architecture
 
 - ⚙️ Rack application built with Falcon, Roda, and async-websocket
@@ -71,6 +59,23 @@ XAI_SECRET=...
 SESSION_SECRET=
 REDIS_URL=
 ```
+
+**Tools**
+
+Relay ships with a small set of built-in tools in [`app/tools/`](app/tools):
+
+- [`create_image.rb`](./app/tools/create_image.rb) generates images
+- [`relay_knowledge.rb`](./app/tools/relay_knowledge.rb) exposes project documentation
+- [`juke_box.rb`](./app/tools/juke_box.rb) provides a built-in playlist for the chat UI
+
+These tools serve as examples of how to extend Relay's behavior. They
+show common patterns such as calling external providers, returning
+documentation-backed knowledge, and rendering structured tool output in
+the interface.
+
+To add your own behavior, create additional tools under `app/tools/`.
+Relay loads registered tools automatically, so new tools become
+available to the model alongside the built-in ones.
 
 **MCP**
 

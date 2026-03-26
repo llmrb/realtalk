@@ -33,7 +33,7 @@ module Relay::Routes
     # Returns an array of tools
     # @return [Array<LLM::Tool>]
     def tools
-      [CreateImage, RelayKnowledge, JukeBox, *mcps.flat_map(&:tools)]
+      [*LLM::Tool.registry, *mcps.flat_map(&:tools)]
     end
 
     def upgrade_required
