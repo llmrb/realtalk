@@ -11,6 +11,10 @@ module Relay::Pages
       @roda = roda
     end
 
+    def r
+      @roda.request
+    end
+
     private
 
     ##

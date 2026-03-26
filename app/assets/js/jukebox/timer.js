@@ -1,131 +1,91 @@
-const Timer = function() {
+const Timer = function(parentEl) {
+  if (!parentEl)
+    return null
+
   const self = Object.create(null)
-  
-  let interval = null
-  let startTime = null
-  let currentStatus = ""
-  let timerElement = null
 
-  const getParent = () => {
-    return document.getElementById("chatbot-status")
-  }
+  self.parentEl = parentEl
+  self.timeout = null
+  self.startTime = null
+  self.el = null
 
-  const getStatusSpan = (parent) => {
+  self.getStatusEl = (parent = self.parentEl) => {
     return parent?.querySelector(".status-value")
   }
 
-  const createTimerElement = () => {
+  self.create = () => {
     const timer = document.createElement("span")
-    timer.className = "timer-value ml-2 inline-flex items-center gap-1 rounded-full bg-theme-accent-soft px-2 py-0.5 text-xs font-medium tracking-tight text-theme-accent-strong transition-all duration-200"
+    timer.className = "timer-value"
     return timer
   }
 
-  const updateTimer = (elapsedSeconds) => {
-    if (!timerElement) return
-    
-    // Add subtle pulse animation for the first few seconds
-    if (elapsedSeconds <= 3) {
-      timerElement.classList.add("animate-pulse")
-    } else {
-      timerElement.classList.remove("animate-pulse")
-    }
-    
-    // Update text with appropriate formatting
-    timerElement.textContent = `${elapsedSeconds}s`
-    
-    // Add tooltip for longer durations
-    if (elapsedSeconds >= 10) {
-      timerElement.title = `Running for ${elapsedSeconds} seconds`
-    } else {
-      timerElement.removeAttribute("title")
-    }
+  self.update = (elapsedSeconds) => {
+    if (!self.el) return
+    self.el.textContent = `${elapsedSeconds}s`
+    if (elapsedSeconds >= 10)
+      self.el.title = `Running for ${elapsedSeconds} seconds`
+    else
+      self.el.removeAttribute("title")
   }
 
-  const attachTimer = (statusSpan) => {
-    if (!statusSpan || timerElement) return
-    
-    timerElement = createTimerElement()
-    
-    // Insert timer after the status text
+  self.tick = () => {
+    if (!self.startTime) return
+    const elapsedMs = Date.now() - self.startTime
+    const elapsedSeconds = Math.floor(elapsedMs / 1000)
+    self.update(elapsedSeconds)
+    const delay = 1000 - (elapsedMs % 1000)
+    self.timeout = setTimeout(self.tick, delay)
+  }
+
+  self.attachTo = (span) => {
+    if (self.el && !self.el.isConnected)
+      self.el = null
+    if (!span || self.el) return
+    self.el = self.create()
     const wrapper = document.createElement("span")
-    wrapper.className = "inline-flex items-center"
-    
-    // Get the original text
-    const originalText = statusSpan.textContent.replace(/\s*\(\d+s\)$/, "")
-    
-    // Create text node for status
+    wrapper.className = "status-active"
+    const originalText = span.textContent.replace(/\s*\(\d+s\)$/, "")
     const textNode = document.createTextNode(originalText)
-    
-    // Clear and rebuild
-    statusSpan.textContent = ""
+    span.textContent = ""
     wrapper.appendChild(textNode)
-    wrapper.appendChild(timerElement)
-    statusSpan.appendChild(wrapper)
+    wrapper.appendChild(self.el)
+    span.appendChild(wrapper)
   }
 
-  const detachTimer = () => {
-    if (!timerElement) return
-    
-    const statusSpan = getStatusSpan(getParent())
-    if (statusSpan && timerElement.parentNode) {
-      // Remove the timer element
-      timerElement.parentNode.remove()
-      
-      // Restore original text
-      const originalText = currentStatus || "Ready"
-      statusSpan.textContent = originalText
-    }
-    
-    timerElement = null
+  self.detach = () => {
+    if (!self.el) return
+    if (self.el.parentNode)
+      self.el.parentNode.remove()
+    self.el = null
   }
 
   self.start = (statusText) => {
-    if (interval) {
-      clearInterval(interval)
-    }
-    
-    currentStatus = statusText.replace(/\s*\(\d+s\)$/, "")
-    startTime = Date.now()
-    
-    const parent = getParent()
-    const statusSpan = getStatusSpan(parent)
-    
-    if (!statusSpan) return
-    
-    // Attach timer element
-    attachTimer(statusSpan)
-    
-    interval = setInterval(() => {
-      const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000)
-      updateTimer(elapsedSeconds)
-    }, 1000)
-    
-    // Initial update
-    updateTimer(0)
+    if (self.timeout)
+      clearTimeout(self.timeout)
+    self.startTime = Date.now()
+    const span = self.getStatusEl()
+    if (!span) return
+    self.attachTo(span)
+    self.update(0)
+    self.timeout = setTimeout(self.tick, 1000)
   }
 
   self.stop = () => {
-    if (interval) {
-      clearInterval(interval)
-      interval = null
-    }
-    
-    detachTimer()
-    startTime = null
-    currentStatus = ""
+    if (self.timeout)
+      clearTimeout(self.timeout)
+    self.timeout = null
+    self.detach()
+    self.startTime = null
   }
 
   self.handle = (parent) => {
-    const statusSpan = getStatusSpan(parent)
-    if (!statusSpan) return
-    
-    const statusText = statusSpan.textContent.trim()
-    
-    if (statusText.startsWith("Thinking") || statusText.startsWith("Running")) {
+    const span = self.getStatusEl(parent)
+    if (!span) return
+    const statusText = span.textContent.trim()
+    if (statusText.startsWith("Thinking") || statusText.startsWith("Running"))
       self.start(statusText)
-    } else {
+    else
       self.stop()
-    }
   }
 
   return self

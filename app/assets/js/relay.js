@@ -13,7 +13,7 @@ import { Timer } from "../js/jukebox/timer"
 ;(function() {
   document.addEventListener("DOMContentLoaded", () => {
     const jukebox = Jukebox()
-    const timer = Timer()
+    const timer = Timer(document.getElementById("chatbot-status"))
     
     const scroll = () => {
       const stream = document.getElementById("chatbot-stream")
@@ -51,6 +51,7 @@ import { Timer } from "../js/jukebox/timer"
     // Handle status updates from HTMX
     document.body.addEventListener("htmx:oobAfterSwap", (event) => {
       if (event.target.id === "chatbot-status") {
+        timer.parentEl = event.target
         timer.handle(event.target)
       }
     })

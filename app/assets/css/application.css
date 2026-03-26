@@ -130,6 +130,25 @@
     background-clip: content-box;
   }
 
+  .context-progress {
+    color: #60a5fa;
+  }
+
+  .context-progress::-webkit-progress-bar {
+    background-color: var(--theme-surface-3);
+    border-radius: 9999px;
+  }
+
+  .context-progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    border-radius: 9999px;
+  }
+
+  .context-progress::-moz-progress-bar {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    border-radius: 9999px;
+  }
+
   .chat-stream {
     @apply rounded-3xl border p-4 text-[15px] leading-7 shadow-[0_18px_40px_rgba(0,0,0,0.28)];
     border-color: var(--theme-panel-border);
@@ -308,6 +327,17 @@
     border-color: var(--theme-accent-border);
     background-color: var(--theme-surface-3);
     color: var(--theme-accent-strong);
+  }
+
+  .timer-value {
+    @apply ml-2 inline-flex items-center justify-center text-[11px] font-semibold tabular-nums tracking-[0.08em];
+    color: rgb(255 255 255 / 0.84);
+  }
+
+  .status-active {
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-sm font-medium;
+    background-color: color-mix(in srgb, var(--theme-surface-3) 88%, black 12%);
+    color: rgb(255 255 255 / 0.96);
   }
 
   .tooltip-card {
