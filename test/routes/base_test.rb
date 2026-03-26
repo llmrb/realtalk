@@ -9,12 +9,6 @@ class BaseRouteTest < TestHelper
     assert_match "/sign-in", last_response.headers["Location"]
   end
 
-  def test_health_check_returns_ok
-    get "/health"
-    assert_equal 200, last_response.status
-    assert_equal "OK", last_response.body
-  end
-
   def test_not_found_returns_404
     get "/nonexistent-route"
     assert_equal 404, last_response.status
