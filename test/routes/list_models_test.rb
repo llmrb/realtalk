@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../test_helper"
+require_relative "../../lib/relay/test"
 
-class ListModelsRouteTest < TestHelper
+class ListModelsRouteTest < Relay::Test
   def test_list_models_requires_authentication
     get "/api/models"
     assert_equal 401, last_response.status

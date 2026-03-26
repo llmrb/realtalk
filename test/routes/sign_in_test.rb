@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../test_helper"
+require_relative "../../lib/relay/test"
 
-class SignInRouteTest < TestHelper
+class SignInRouteTest < Relay::Test
   def test_sign_in_page_accessible
     get "/sign-in"
     assert_equal 200, last_response.status
