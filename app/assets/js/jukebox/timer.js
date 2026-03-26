@@ -1,15 +1,15 @@
 const Timer = function() {
   const self = Object.create(null)
   const statusElement = document.getElementById("chatbot-status")
-  self.statusSpan = statusElement?.querySelector(".font-medium.text-zinc-100")
+  self.span = statusElement?.querySelector(".font-medium.text-zinc-100")
   
   let interval = null
   let startTime = null
   let currentStatus = ""
 
   const update = (text) => {
-    if (self.statusSpan) {
-      self.statusSpan.textContent = text
+    if (self.span) {
+      self.span.textContent = text
     }
   }
 
@@ -35,8 +35,8 @@ const Timer = function() {
     currentStatus = ""
   }
 
-  self.handle = (statusElement) => {
-    const span = statusElement.querySelector(".font-medium.text-zinc-100")
+  self.handle = (parentEl) => {
+    const span = parentEl.querySelector(".font-medium.text-zinc-100")
     if (!span) return
     const statusText = span.textContent.trim()
     if (statusText.startsWith("Thinking") || statusText.startsWith("Running")) {
