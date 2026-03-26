@@ -7,6 +7,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      RACK_ENV: test
 
     steps:
       - name: Check out code
