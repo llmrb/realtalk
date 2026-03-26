@@ -4,7 +4,7 @@ const Timer = function() {
   let startTime = null
   let currentStatus = ""
 
-  const updateDisplay = (text) => {
+  const update = (text) => {
     const statusElement = document.getElementById("chatbot-status")
     if (!statusElement) return
     
@@ -24,10 +24,10 @@ const Timer = function() {
     
     interval = setInterval(() => {
       const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000)
-      updateDisplay(`${currentStatus} (${elapsedSeconds}s)`)
+      update(`${currentStatus} (${elapsedSeconds}s)`)
     }, 1000)
     
-    updateDisplay(`${currentStatus} (0s)`)
+    update(`${currentStatus} (0s)`)
   }
 
   self.stop = () => {
@@ -39,7 +39,7 @@ const Timer = function() {
     currentStatus = ""
   }
 
-  self.handleStatusUpdate = (statusElement) => {
+  self.handle = (statusElement) => {
     const statusSpan = statusElement.querySelector(".font-medium.text-zinc-100")
     if (!statusSpan) return
     
