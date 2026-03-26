@@ -287,8 +287,6 @@ Install test dependencies:
 bundle install
 ```
 
-### Running Tests
-
 Run the full test suite:
 
 ```bash
