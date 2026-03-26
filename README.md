@@ -43,7 +43,7 @@ Redis is used by Sidekiq but we haven't had a reason to use it yet, so it is opt
 SQLite is required for database support.
 
     bundle install
-    bundle exec rake db:migrate
+    bundle exec rake db:setup
     bundle exec rake dev:start
 
 **Secrets**

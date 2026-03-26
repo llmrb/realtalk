@@ -72,6 +72,13 @@ module Relay
   end
 
   ##
+  # Returns the path to the db/migrate directory
+  # @return [String]
+  def self.migrations_dir
+    @migrations_dir ||= File.join(root, "db", "migrate")
+  end
+
+  ##
   # Returns the path to the app/views/fragments directory
   # @return [String]
   def self.fragments_dir
