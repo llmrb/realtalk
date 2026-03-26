@@ -1,15 +1,15 @@
 const Timer = function() {
   const self = Object.create(null)
   const statusElement = document.getElementById("chatbot-status")
-  const statusSpan = statusElement?.querySelector(".font-medium.text-zinc-100")
+  self.statusSpan = statusElement?.querySelector(".font-medium.text-zinc-100")
   
   let interval = null
   let startTime = null
   let currentStatus = ""
 
   const update = (text) => {
-    if (statusSpan) {
-      statusSpan.textContent = text
+    if (self.statusSpan) {
+      self.statusSpan.textContent = text
     }
   }
 
