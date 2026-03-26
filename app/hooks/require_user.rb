@@ -4,11 +4,7 @@ module Relay::Hooks
   module RequireUser
     def call
       @user = Relay::Models::User[session["user_id"]]
-      return super unless @user.nil?
-
-      response.status = 401
-      response["content-type"] = "application/json"
-      {error: "Unauthorized"}.to_json
+      @user.nil? ? r.redirect("/sign-in") : super
     end
   end
 end
