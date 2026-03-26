@@ -1,288 +1,150 @@
-## About
+# Relay
 
-Relay is a developer environment for working with LLMs in real time.
-Built with [llm.rb](https://github.com/llmrb/llm.rb#readme), HTMX,
-Roda, Falcon, and WebSockets, it gives you a Ruby-first interface for
-experimenting with providers, models, tools, MCP servers, streaming
-responses, and background jobs.
-
-Relay also serves as a reference implementation for building
-production-style, tool-enabled LLM applications with llm.rb while
-keeping the frontend light and the architecture Ruby-centric.
-
-## Screencast
-
-[![Watch the Relay screencast](https://img.youtube.com/vi/Jb7LNUYlCf4/maxresdefault.jpg)](https://www.youtube.com/watch?v=Jb7LNUYlCf4)
+Relay is a Rack-based web application that provides an interface for interacting with LLM models through a unified API.
 
 ## Features
 
-### Application
+- WebSocket support for real-time communication
+- Multiple LLM provider support
+- Session-based authentication
+- Tool integration for extended functionality
+- Asset management and compilation
+- Database persistence with Sequel
 
-- 🌊 Streaming chat over WebSockets
-- 🤖 Multiple provider support: OpenAI, Google, Anthropic, DeepSeek, xAI
-- 🛠️ Add your own tools to [app/tools/](app/tools)
-- 🧪 Sample tools: [create_image.rb](./app/tools/create_image.rb), [relay_knowledge.rb](./app/tools/relay_knowledge.rb), [juke_box.rb](./app/tools/juke_box.rb)
-- 🔌 Optional MCP server support via [app/config/mcp.yml.sample](app/config/mcp.yml.sample)
-- 🔐 User authentication with session-backed sign-in
+## Getting Started
 
-### Architecture
+### Prerequisites
 
-- ⚙️ Rack application built with Falcon, Roda, and async-websocket
-- 🗃️ Sequel with built-in migrations
-- 🧵 Sidekiq workers for background jobs
-- 🧰 Built-in task monitor that supervises the full dev environment: web, workers, assets
-- 🗂️  Session support through Roda's session plugin
-- ⚡ In-memory cache support via `Relay.cache`
-- 🔐 Automatic `.env` loading during app boot
+- Ruby 3.0+
+- Bundler
+- SQLite3
 
-## Quick start
+### Installation
 
-**Requirements**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/llmrb/relay.git
+   cd relay
+   ```
 
-Relay is easy to start locally. Right now it only requires:
+2. Install dependencies:
+   ```bash
+   bundle install
+   ```
 
-- Ruby
-- a web server, via `bundle exec rake dev:start`
-- Node.js
-- Webpack
-- SQLite
+3. Set up the database:
+   ```bash
+   rake db:migrate
+   ```
 
-The architecture supports more, including Sidekiq and Redis, but those
-are optional for the current local setup.
+4. Start the development server:
+   ```bash
+   rake dev
+   ```
 
-**Setup**
+5. Visit `http://localhost:9292` in your browser.
 
-The following commands should get you setup with a local instance of Relay
-once the requirements mentioned above are met. The `db/seeds.rb` file
-creates a default user with email `0x1eef@hardenedbsd.org` and
-password `relay`. That account can be used to sign in locally, or
-change the seeded values in [`db/seeds.rb`](./db/seeds.rb) to something
-else before running `bundle exec rake db:seed`:
+### Environment Configuration
 
-    bundle install
-    bundle exec rake db:setup
-    bundle exec rake db:seed
-    bundle exec rake dev:start
+Copy `.env.sample` to `.env` and adjust settings as needed:
 
-**Secrets**
-
-Set your secrets in `.env`:
-
-```sh
-OPENAI_SECRET=...
-GOOGLE_SECRET=...
-ANTHROPIC_SECRET=...
-DEEPSEEK_SECRET=...
-XAI_SECRET=...
-SESSION_SECRET=
-REDIS_URL=
+```bash
+cp .env.sample .env
 ```
 
-## Customization
+## Development
 
-**Tools**
+### Running Tests
 
-Relay ships with a small set of built-in tools in [`app/tools/`](app/tools):
+The project now includes a test suite using `rack-test` and `test-unit`. To run tests:
 
-- [`create_image.rb`](./app/tools/create_image.rb) generates images
-- [`relay_knowledge.rb`](./app/tools/relay_knowledge.rb) exposes project documentation
-- [`juke_box.rb`](./app/tools/juke_box.rb) provides a built-in playlist for the chat UI
+```bash
+# Run all tests
+rake test
 
-These tools serve as examples of how to extend Relay's behavior. They
-show common patterns such as calling external providers, returning
-documentation-backed knowledge, and rendering structured tool output in
-the interface.
-
-To add your own behavior, create additional tools under `app/tools/`.
-Relay loads registered tools automatically, so new tools become
-available to the model alongside the built-in ones.
-
-**MCP**
-
-Relay reads MCP server configuration from `app/config/mcp.yml` when the
-file is present. Use [`app/config/mcp.yml.sample`](app/config/mcp.yml.sample)
-as the starting point.
-
-You can add your own stdio MCP servers by appending entries under
-`stdio`. Each server entry includes:
-
-- `name`: the display name shown in the UI
-- `description`: a short explanation of what the server provides
-- `config`: the stdio launch configuration Relay passes to `LLM.mcp`
-
-The `config` object supports:
-
-- `argv`: the command and arguments used to start the MCP server
-- `env`: environment variables passed to the process
-- `cwd`: optional working directory for the process
-
-Example:
-
-```yml
-stdio:
-  - name: GitHub
-    description: GitHub's MCP server
-    config:
-      argv: ["github-mcp-server", "stdio"]
-      env:
-        GITHUB_PERSONAL_ACCESS_TOKEN: <YOUR_TOKEN>
+# Create test directory structure (first time setup)
+rake test:create
 ```
 
-Setup:
+Tests are located in the `test/` directory and follow the naming pattern `*_test.rb`.
 
-1. Install the MCP server binary you want to use, for example
-   `github-mcp-server`.
-2. Copy `app/config/mcp.yml.sample` to `app/config/mcp.yml`.
-3. Fill in any required environment variables such as API tokens.
-4. Restart Relay.
+### Code Quality
 
-Once configured, Relay starts the MCP servers for the chat session and
-adds their tools to the available tool list. If `app/config/mcp.yml`
-is absent, Relay starts without any MCP servers.
+The project uses Standard Ruby for code formatting:
+
+```bash
+# Check code style
+rake standard
+
+# Auto-fix code style issues
+rake standard:fix
+```
+
+### Database Tasks
+
+```bash
+# Run migrations
+rake db:migrate
+
+# Create a new migration
+rake db:create_migration[create_users_table]
+
+# Rollback last migration
+rake db:rollback
+```
+
+### Asset Compilation
+
+```bash
+# Compile assets
+rake assets:compile
+
+# Watch for asset changes (development)
+rake assets:watch
+```
 
 ## Architecture
 
-**Overview**
+Relay is built as a Rack application using Roda for routing. The application follows a modular structure:
 
-The architecture is intentionally simple. HTMX keeps the client light,
-while server-rendered HTML keeps the application comfortable for
-Ruby-focused developers. Background work is handled with Sidekiq, and
-development processes are coordinated by Relay's task monitor.
+- `app/routes/` - Route definitions
+- `app/models/` - Database models
+- `app/views/` - View templates
+- `app/tools/` - Tool implementations
+- `app/assets/` - Static assets
+- `app/workers/` - Background job workers
 
-Some important notes:
+### Key Components
 
-* The app boots from `app/init.rb`, which sets up the database,
-  autoloading, and application initialization.
-* `.env` is loaded automatically during boot when present.
-* HTTP routing is handled by Roda, with templates rendered from
-  `app/views` and static assets served from `public/`.
-* Webpack builds the JavaScript and CSS assets from `app/assets`.
+1. **Router** (`app/init/router.rb`) - Main Roda application
+2. **Database** (`app/init/database.rb`) - Sequel configuration
+3. **Tools** (`app/init/tools.rb`) - Tool registration and management
+4. **WebSocket** (`app/routes/websocket.rb`) - WebSocket handler
 
-The codebase is organized by responsibility:
+## API Endpoints
 
-- `app/init` contains boot and framework setup
-- `app/hooks` contains reusable request hooks
-- `app/pages` contains full-page renderers
-- `app/tools` contains tools
-- `app/prompts` contains system prompt
-- `app/models` contains Sequel models
-- `app/routes` contains route classes and WebSocket handlers
-- `app/views` contains HTML templates and partials
-- `app/workers` contains Sidekiq workers
-- `db/` contains database configuration and migrations
-- `tasks/` contains rake tasks for development, assets, and database work
-- `lib/relay` contains support code like the task monitor
+- `GET /` - Redirects to sign-in
+- `GET /sign-in` - Sign-in page
+- `POST /sign-in` - Authenticate user
+- `GET /api/models` - List available models (requires auth)
+- `GET /api/providers` - List available providers (requires auth)
+- `GET /api/tools` - List available tools (requires auth)
+- `GET /health` - Health check endpoint
+- `GET /ws` - WebSocket connection
 
-**Route**
+## WebSocket Protocol
 
-A route is a class that inherits from `Relay::Routes::Base` and
-implements `call`. `Base` delegates missing methods to the current
-Roda instance, so route classes can use helpers like `view`, `partial`,
-`request`, `response`, `session`, and `params`.
+The WebSocket endpoint supports real-time communication with LLM models. Connect to `ws://localhost:9292/ws` and send JSON messages following the protocol defined in `app/routes/websocket.rb`.
 
-Routes also expose `r` as a small alias for `request`, which mirrors the
-way Roda route blocks commonly refer to the request object:
+## Contributing
 
-```ruby
-# app/routes/some_route.rb
-module Relay::Routes
-  class SomeRoute < Base
-    def call
-      r.redirect("/some-other-route")
-    end
-  end
-end
-
-# app/init/router.rb
-r.on "some-route" do
-  r.is do
-    SomeRoute.new(self).call
-  end
-end
-```
-
-**Page**
-
-A page is a class that inherits from `Relay::Pages::Base` and renders a
-full page from `app/views/pages`. Like routes, pages delegate missing
-methods to the current Roda instance, but they are intended for page
-rendering rather than request actions:
-
-```ruby
-# app/pages/chat.rb
-module Relay::Pages
-  class Chat < Base
-    prepend Relay::Hooks::RequireUser
-
-    def call
-      response["content-type"] = "text/html"
-      page("chat", title: "Relay")
-    end
-  end
-end
-
-# app/init/router.rb
-r.root do
-  Pages::Chat.new(self).call
-end
-```
-
-**Hooks**
-
-A hook is an ordinary Ruby module, usually stored under `app/hooks`,
-that uses `prepend` to act as a hook for page and route objects.
-Hooks implement `call` and control request flow similarly to a before
-filter: they decide whether to let the request proceed by calling
-`super`, or halt the request by returning or redirecting instead.
-
-Hooks are named as verbs that describe the behavior they enforce, such
-as `RequireUser`.
-
-Each hook typically defines `call`, performs its setup or guard logic,
-and then calls `super` to continue to the next prepended hook or, once
-no hooks remain, the underlying page or route:
-
-```ruby
-module Relay::Hooks
-  module RequireUser
-    def call
-      @user = Relay::Models::User[session["user_id"]]
-      @user.nil? ? r.redirect("/sign-in") : super
-    end
-  end
-end
-
-module Relay::Pages
-  class Chat < Base
-    prepend Relay::Hooks::RequireUser
-
-    def call
-      page("chat", title: "Relay")
-    end
-  end
-end
-```
-
-**State**
-
-Relay includes session support through Roda's session plugin. This is
-useful for lightweight per-user state such as the current provider and
-model, which can be rendered directly in views and updated through
-normal route handlers.
-
-For shared in-process state, Relay exposes `Relay.cache`, which is
-backed by `Relay::Cache::InMemoryCache`. This is useful for small,
-ephemeral caches such as model lists that can be reused across routes
-without treating them as persistent data.
-
-## Sources
-
-* [GitHub.com](https://github.com/llmrb/relay)
-* [GitLab.com](https://gitlab.com/llmrb/relay)
-* [Codeberg.org](https://codeberg.org/llmrb/relay)
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
 ## License
 
-[BSD Zero Clause](https://choosealicense.com/licenses/0bsd/)
-<br>
-See [LICENSE](./LICENSE)
+This project is licensed under the MIT License - see the LICENSE file for details.
