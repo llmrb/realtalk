@@ -10,12 +10,13 @@ const Timer = function() {
     return parentEl
   }
 
-  const getSpan = (parent = getParent()) => {
+  const getSpan = (parent) => {
     return parent?.querySelector(".font-medium.text-zinc-100")
   }
 
   const update = (text) => {
-    const span = getSpan()
+    const parent = getParent()
+    const span = getSpan(parent)
     if (span) {
       span.textContent = text
     }
@@ -45,7 +46,8 @@ const Timer = function() {
 
   self.handle = (newParentEl) => {
     parentEl = newParentEl
-    const span = getSpan()
+    const parent = getParent()
+    const span = getSpan(parent)
     if (!span) return
     const statusText = span.textContent.trim()
     if (statusText.startsWith("Thinking") || statusText.startsWith("Running")) {
