@@ -40,7 +40,7 @@ const Timer = function() {
   }
 
   self.handle = (parentEl) => {
-    const span = parentEl.querySelector(".font-medium.text-zinc-100")
+    const span = getSpan()
     if (!span) return
     const statusText = span.textContent.trim()
     if (statusText.startsWith("Thinking") || statusText.startsWith("Running")) {
