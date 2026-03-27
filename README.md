@@ -302,9 +302,6 @@ rake test
 
 - **`test/setup.rb`** - Base test setup with Rack::Test integration
 - **`test/routes/`** - Route-specific tests
-  - `base_test.rb` - Tests for root redirect, health check, and 404 handling
-  - `list_models_test.rb` - Tests for authentication requirements on API endpoints
-  - `sign_in_test.rb` - Tests for sign-in page accessibility and form validation
 
 Tests are automatically discovered from files matching `test/**/*_test.rb`.
 
