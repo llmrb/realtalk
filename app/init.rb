@@ -13,9 +13,20 @@ module Relay
     File.join(__dir__, "init")
   )
   loader.push_dir(__dir__, namespace: self)
-  loader.setup
 
   require_relative "../lib/relay"
+
+  loader.enable_reloading if development?
+  loader.setup
+
+  ##
+  # Returns the Zeitwerk loader used for application autoloading
+  # @return [Zeitwerk::Loader]
+  def self.loader
+    @loader
+  end
+  @loader = loader
+
   require_relative "init/env"
   require_relative "init/database"
   require_relative "init/sidekiq"

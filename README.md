@@ -34,6 +34,7 @@ keeping the frontend light and the architecture Ruby-centric.
 - 🗂️  Session support through Roda's session plugin
 - ⚡ In-memory cache support via `Relay.cache`
 - 🔐 Automatic `.env` loading during app boot
+- ♻️ Zeitwerk hot reloading in development
 
 ## Quick start
 
@@ -63,6 +64,10 @@ else before running `bundle exec rake db:seed`:
     bundle exec rake db:setup
     bundle exec rake db:seed
     bundle exec rake dev:start
+
+During development, Relay now enables Zeitwerk reloading and refreshes
+autoloaded constants between requests so code changes under `app/`
+are picked up without restarting the web server.
 
 **Secrets**
 
@@ -295,10 +300,10 @@ rake test
 
 ### Test Structure
 
-- **`test/setup.rb`** - Shared test setup and Rack::Test bootstrapping
+- **`test/setup.rb`** - Base test setup with Rack::Test integration
 - **`test/routes/`** - Route-specific tests
 
-The `rake test` task loads all files matching `test/**/*_test.rb`.
+Tests are automatically discovered from files matching `test/**/*_test.rb`.
 
 ## Sources
 

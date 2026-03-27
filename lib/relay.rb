@@ -6,6 +6,20 @@ module Relay
   require_relative "relay/task"
 
   ##
+  # Returns the current Rack environment
+  # @return [String]
+  def self.environment
+    ENV.fetch("RACK_ENV", "development")
+  end
+
+  ##
+  # Returns true when running in development
+  # @return [Boolean]
+  def self.development?
+    environment == "development"
+  end
+
+  ##
   # Returns mcp configuration
   # @return [LLM::Object]
   def self.mcp
