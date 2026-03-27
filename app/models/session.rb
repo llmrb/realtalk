@@ -18,7 +18,13 @@ module Relay::Models
     # @param [LLM::Provider] llm_provider
     # @return [LLM::Session]
     def to_llm_session(llm_provider)
-      LLM::Session.new(llm_provider).restore(string: session_data.to_json)
+      # Handle both JSON string and already-parsed JSON objects
+      json_string = if session_data.is_a?(String)
+        session_data
+      else
+        session_data.to_json
+      end
+      LLM::Session.new(llm_provider).restore(string: json_string)
     end
 
     ##
