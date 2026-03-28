@@ -14,47 +14,22 @@ import { Timer } from "../js/jukebox/timer"
   document.addEventListener("DOMContentLoaded", () => {
     const jukebox = Jukebox()
     const timer = Timer(document.getElementById("chatbot-status"))
-
+    const stream = document.getElementById("chatbot-stream")
     let shouldFollow = true
 
-    const streamEl = () => document.getElementById("chatbot-stream")
-
-    const isNearBottom = (el, threshold = 48) => {
-      if (!el) return true
-      return el.scrollHeight - el.scrollTop - el.clientHeight <= threshold
-    }
+    const nearBottom = (el, threshold = 48) =>
+      !el || el.scrollHeight - el.scrollTop - el.clientHeight <= threshold
 
     const scroll = () => {
-      const stream = streamEl()
-      if (!stream) return
+      if (!stream || !shouldFollow) return
       stream.scrollTop = stream.scrollHeight
     }
 
     const follow = () => {
-      if (!shouldFollow) return
-
       scroll()
-      requestAnimationFrame(() => {
-        if (shouldFollow) scroll()
-      })
-      setTimeout(() => {
-        if (shouldFollow) scroll()
-      }, 0)
-      setTimeout(() => {
-        if (shouldFollow) scroll()
-      }, 32)
-    }
-
-    const bindScrollTracking = () => {
-      const stream = streamEl()
-      if (!stream || stream.dataset.followBound === "true") return
-
-      stream.dataset.followBound = "true"
-      shouldFollow = isNearBottom(stream)
-
-      stream.addEventListener("scroll", () => {
-        shouldFollow = isNearBottom(stream)
-      }, { passive: true })
+      requestAnimationFrame(scroll)
+      setTimeout(scroll, 0)
+      setTimeout(scroll, 32)
     }
 
     const syntaxHighlight = (el) =>{
@@ -77,27 +52,27 @@ import { Timer } from "../js/jukebox/timer"
       })
     }
 
-    // Handle status updates from HTMX
+    if (stream) {
+      shouldFollow = nearBottom(stream)
+      stream.addEventListener("scroll", () => {
+        shouldFollow = nearBottom(stream)
+      }, { passive: true })
+    }
+
     document.body.addEventListener("htmx:oobAfterSwap", (event) => {
       if (event.target.id === "chatbot-status") {
         timer.parentEl = event.target
         timer.handle(event.target)
       }
+      markdown(event.target)
+      follow()
     })
-
-    markdown()
-    bindScrollTracking()
-    follow()
 
     document.body.addEventListener("htmx:afterSwap", (event) => {
       markdown(event.target)
-      bindScrollTracking()
     })
 
-    document.body.addEventListener("htmx:oobAfterSwap", (event) => {
-      markdown(event.target)
-      bindScrollTracking()
-      follow()
-    })
+    markdown()
+    follow()
   })
 })()
