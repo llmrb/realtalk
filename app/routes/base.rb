@@ -86,14 +86,6 @@ module Relay::Routes
     end
 
     ##
-    # @param [String] text
-    # @return [String]
-    #  Renders markdown to HTML
-    def markdown(text)
-      Relay.markdown(text)
-    end
-
-    ##
     # Delegate missing methods to the Roda instance
     def method_missing(name, *args, **kwargs, &block)
       if @roda.respond_to?(name)

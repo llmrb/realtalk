@@ -41,14 +41,6 @@ module Relay::Pages
     end
 
     ##
-    # @param [String] text
-    # @return [String]
-    #  Renders markdown to HTML
-    def markdown(text)
-      Relay.markdown(text)
-    end
-
-    ##
     # @return [Roda::RodaRequest]
     #  Alias the request object as `r` to match Roda route blocks.
     def r
