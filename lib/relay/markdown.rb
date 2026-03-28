@@ -17,7 +17,7 @@ module Relay
   #  Returns the shared markdown renderer
   def self.renderer
     Redcarpet::Markdown.new(
-      Markdown.new(filter_html: true, safe_links_only: true),
+      Markdown.new(filter_html: false, safe_links_only: true),
       autolink: true,
       fenced_code_blocks: true,
       lax_spacing: true,
