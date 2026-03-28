@@ -2,6 +2,8 @@
 
 require_relative "app/init"
 
+use Rack::Static, urls: ["/g", "/images", "/stylesheets", "/js"], root: "public"
+
 case Relay.environment
 when "development"
   use Rack::Reloader
@@ -15,5 +17,4 @@ when "development"
   map("/sidekiq") { run Sidekiq::Web }
 end
 
-use Rack::Static, urls: ["/g", "/images", "/stylesheets", "/js"], root: "public"
 run Relay::Router
