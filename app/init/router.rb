@@ -70,5 +70,9 @@ module Relay
         end
       end
     end
+
+    def markdown(text)
+      Relay.markdown(text)
+    end
   end
 end

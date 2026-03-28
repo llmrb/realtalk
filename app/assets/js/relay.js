@@ -1,10 +1,8 @@
 import "../css/application.css"
 import htmx from "htmx.org"
 import hljs from "highlight.js"
-import { marked } from "marked"
 
 window.htmx = htmx
-window.marked = marked
 require("htmx-ext-ws")
 
 import { Jukebox } from "../js/jukebox"
@@ -16,6 +14,7 @@ import { Timer } from "../js/jukebox/timer"
     const timer = Timer(document.getElementById("chatbot-status"))
     const stream = document.getElementById("chatbot-stream")
     let shouldFollow = true
+    let followFrame = null
 
     const isNearBottom = (el, threshold = 48) =>
       !el || (el.scrollHeight - (el.scrollTop + el.clientHeight)) <= threshold
@@ -26,10 +25,11 @@ import { Timer } from "../js/jukebox/timer"
     }
 
     const follow = () => {
-      scroll()
-      requestAnimationFrame(scroll)
-      setTimeout(scroll, 0)
-      setTimeout(scroll, 32)
+      if (followFrame) return
+      followFrame = requestAnimationFrame(() => {
+        followFrame = null
+        scroll()
+      })
     }
 
     const syntaxHighlight = (el) =>{
@@ -41,15 +41,12 @@ import { Timer } from "../js/jukebox/timer"
       el.setAttribute("rel", "noreferrer noopener")
     }
 
-    const markdown = (root = document.body) => {
-      const nodes = root.querySelectorAll("[data-markdown]")
-      nodes.forEach((node, index) => {
-        node.innerHTML = marked.parse(node.dataset.markdownSource || "")
-        node.querySelectorAll("pre code").forEach(syntaxHighlight)
-        node.querySelectorAll("a").forEach(modifyAnchors)
-        if (index === nodes.length - 1)
-          jukebox.scanForMusic(node)
-      })
+    const enhance = (root = document.body) => {
+      root.querySelectorAll("pre code").forEach(syntaxHighlight)
+      root.querySelectorAll("a").forEach(modifyAnchors)
+      const nodes = root.querySelectorAll(".assistant-content")
+      if (nodes.length > 0)
+        jukebox.scanForMusic(nodes[nodes.length - 1])
     }
 
     document.body.addEventListener("htmx:beforeSwap", () => {
@@ -57,19 +54,21 @@ import { Timer } from "../js/jukebox/timer"
     })
 
     document.body.addEventListener("htmx:oobAfterSwap", (event) => {
-      if (event.target.id === "chatbot-status") {
-        timer.parentEl = event.target
-        timer.handle(event.target)
+      const elt = event.detail.elt || event.target
+      if (elt.id === "chatbot-status") {
+        timer.parentEl = elt
+        timer.handle(elt)
       }
-      markdown(event.target)
+      enhance(elt)
       follow()
     })
 
     document.body.addEventListener("htmx:afterSwap", (event) => {
-      markdown(event.target)
+      const elt = event.detail.elt || event.target
+      enhance(elt)
     })
 
-    markdown()
+    enhance()
     follow()
   })
 })()

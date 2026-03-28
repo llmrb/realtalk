@@ -1,1 +1,1 @@
-<div hx-swap-oob="outerHTML:#chatbot-messages > :last-child"><%== partial("fragments/message", locals: {message:}) %></div>
+<div hx-swap-oob="outerHTML:#chatbot-messages > :last-child .assistant-content > div"><div><%== markdown(message[:content]) %></div></div>
