@@ -1,31 +1,18 @@
 <div
   id="chatbot-stream"
-  hx-swap-oob="outerHTML"
   class="chat-stream scrollbar-chat h-full min-h-24 min-w-0 flex-1 self-stretch overflow-y-auto"
 >
-  <div class="space-y-4">
+  <div class="space-y-4" id="chatbot-messages">
     <div class="theme-strong mt-3 text-center text-xs first:mt-0">
       Welcome to Relay
       <br>
       <%= session["provider"] %> / <%= session["model"] %>
     </div>
     <% messages.each do |message| %>
-      <% if message[:role] == :user %>
-        <div class="mt-3 flex justify-end first:mt-0">
-          <div class="chat-bubble-user w-fit max-w-[75%] [&_*]:text-inherit">
-            <div class="assistant-content" data-markdown data-markdown-source="<%= message[:content] %>"></div>
-          </div>
-        </div>
-      <% else %>
-        <div class="mt-3 flex first:mt-0">
-          <div class="assistant-content chat-bubble-assistant w-fit max-w-[85%]">
-            <div data-markdown data-markdown-source="<%= message[:content] %>"></div>
-          </div>
-        </div>
-      <% end %>
+      <%== partial("fragments/message", locals: {message:}) %>
     <% end %>
     <% if messages.empty? %>
-      <div class="theme-strong px-2 text-sm leading-7">
+      <div class="theme-strong px-2 text-sm leading-7" id="chatbot-empty-state">
         Ask a question, switch models, or explore the built-in tools.
       </div>
     <% end %>

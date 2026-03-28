@@ -48,7 +48,9 @@ class Relay::Routes::Websocket
       return if message.to_s.empty?
       vars[:messages].concat [{role: :user, content: message}, {role: :assistant, content: +""}]
       write(conn, fragment(:status, status: "Thinking..."))
-      write(conn, fragment(:chat))
+      write(conn, fragment(:remove_empty_state)) if vars[:messages].length == 2
+      write(conn, fragment(:append_message, message: vars[:messages][-2]))
+      write(conn, fragment(:append_message, message: vars[:messages][-1]))
       write(conn, fragment(:input))
       send(ctx, message, params)
       invoke(ctx, ctx.functions, conn, params)
@@ -110,7 +112,7 @@ class Relay::Routes::Websocket
     def stream(conn, chunk)
       message = vars[:messages].reverse_each.find { _1[:role] == :assistant }
       message[:content] << chunk
-      write conn, fragment(:chat)
+      write conn, fragment(:replace_last_message, message:)
     end
 
     ##
@@ -124,9 +126,12 @@ class Relay::Routes::Websocket
     def fragment(name, **locals)
       vars.merge!(locals)
       case name
+      when :append_message then partial("fragments/append_message", locals: vars)
       when :chat then partial("fragments/stream", locals: vars)
-      when :status then partial("fragments/status", locals: vars)
       when :input then partial("fragments/input")
+      when :remove_empty_state then partial("fragments/remove_empty_state")
+      when :replace_last_message then partial("fragments/replace_last_message", locals: vars)
+      when :status then partial("fragments/status", locals: vars)
       end
     end
 
@@ -149,7 +154,6 @@ class Relay::Routes::Websocket
     #  The formatted cost string
     def format_cost(cost)
       return "unknown" if cost == "unknown"
-
       "$#{cost}"
     end
 

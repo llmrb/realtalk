@@ -14,10 +14,14 @@ import { Timer } from "../js/jukebox/timer"
   document.addEventListener("DOMContentLoaded", () => {
     const jukebox = Jukebox()
     const timer = Timer(document.getElementById("chatbot-status"))
-    
+    const stream = document.getElementById("chatbot-stream")
+    let shouldFollow = true
+
+    const isNearBottom = (el, threshold = 48) =>
+      !el || (el.scrollHeight - (el.scrollTop + el.clientHeight)) <= threshold
+
     const scroll = () => {
-      const stream = document.getElementById("chatbot-stream")
-      if (!stream) return
+      if (!stream || !shouldFollow) return
       stream.scrollTop = stream.scrollHeight
     }
 
@@ -48,21 +52,24 @@ import { Timer } from "../js/jukebox/timer"
       })
     }
 
-    // Handle status updates from HTMX
+    document.body.addEventListener("htmx:beforeSwap", () => {
+      shouldFollow = isNearBottom(stream)
+    })
+
     document.body.addEventListener("htmx:oobAfterSwap", (event) => {
       if (event.target.id === "chatbot-status") {
         timer.parentEl = event.target
         timer.handle(event.target)
       }
+      markdown(event.target)
+      follow()
+    })
+
+    document.body.addEventListener("htmx:afterSwap", (event) => {
+      markdown(event.target)
     })
 
     markdown()
     follow()
-
-    document.body.addEventListener("htmx:afterSwap", (event) => markdown(event.target))
-    document.body.addEventListener("htmx:oobAfterSwap", (event) => {
-      markdown(event.target)
-      follow()
-    })
   })
 })()
