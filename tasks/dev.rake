@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :dev do
   desc "Start the dev environment"
   task :start do

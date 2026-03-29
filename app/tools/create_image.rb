@@ -18,12 +18,12 @@ module Relay::Tools
       res.images.map do |image|
         file = "#{SecureRandom.hex}.png"
         IO.copy_stream image, File.join(images_dir, file)
-        { directions: 'embed the html in your response exactly as it appears', html: "<img src='/g/#{file}'>" }
+        {directions: "embed the html in your response exactly as it appears", html: "<img src='/g/#{file}'>"}
       end
     rescue LLM::RateLimitError => ex
-      { error: ex.class.to_s, message: "rate limit reached" }
+      {error: ex.class.to_s, message: "rate limit reached"}
     rescue => ex
-      { error: ex.class.to_s, message: ex.message }
+      {error: ex.class.to_s, message: ex.message}
     end
 
     private

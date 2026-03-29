@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Sequel.extension :migration
 
 namespace :db do
@@ -32,7 +34,7 @@ namespace :db do
   end
 
   desc "Seed the database with initial data"
-  task :seed => [:migrate] do
+  task seed: [:migrate] do
     load File.join(Relay.root, "db/seeds.rb")
   end
 

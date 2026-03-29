@@ -7,7 +7,7 @@ module Relay
     plugin :common_logger
 
     plugin :sessions,
-      key: 'relay.session',
+      key: "relay.session",
       secret: ENV["SESSION_SECRET"]
 
     plugin :partials,

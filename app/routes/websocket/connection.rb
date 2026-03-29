@@ -58,7 +58,7 @@ class Relay::Routes::Websocket
       write(conn, fragment(:status, status: "Ready", context_window: context_window(ctx), cost: format_cost(ctx.cost)))
     rescue LLM::NoSuchRegistryError, LLM::NoSuchModelError
       write(conn, fragment(:status, cost: "unknown", status: "Ready"))
-    rescue StandardError => e
+    rescue => e
       pp e.class, e.message, e.backtrace
       write(conn, fragment(:status, status: "Error"))
     end
@@ -145,7 +145,7 @@ class Relay::Routes::Websocket
     #  The current token usage, maximum window, and display label
     def context_window(sess)
       used, max = sess.usage.total_tokens || 0,  sess.context_window || 0
-      {used:, max:, label: "#{used} / #{max} tokens" }
+      {used:, max:, label: "#{used} / #{max} tokens"}
     end
 
     ##
@@ -167,7 +167,7 @@ class Relay::Routes::Websocket
     #  The message text, or an empty string if parsing fails
     def parse_message(message)
       buffer = JSON.parse(message.buffer)
-      buffer['message']
+      buffer["message"]
     rescue JSON::ParserError
       ""
     end
@@ -176,7 +176,7 @@ class Relay::Routes::Websocket
     # Returns the fragments variables
     # @return [Hash]
     def vars
-      @temp ||= { messages: [] }
+      @temp ||= {messages: []}
     end
 
     ##
@@ -188,10 +188,10 @@ class Relay::Routes::Websocket
     # @return [Array<LLM::Function::Return>, nil]
     #  Returns thread-group values, or nil for proc work
     def wait_with_heartbeat(conn, runner)
-      if Proc === runner
-        runnable = Thread.new { runner.call }
+      runnable = if Proc === runner
+        Thread.new { runner.call }
       else
-        runnable = runner
+        runner
       end
       while runnable.alive?
         write conn, "<!-- heartbeat -->"

@@ -14,7 +14,7 @@ module Relay::Routes
       Async::WebSocket::Adapters::Rack.open(request.env) do |conn|
         mcps.each(&:start)
         stream = Stream.new(conn, self)
-        params = { model:, stream:, tools: }
+        params = {model:, stream:, tools:}
         on_connect conn, llm, ctx, params
       ensure
         mcps.each(&:stop)
@@ -47,7 +47,7 @@ module Relay::Routes
     def tool_status(functions)
       names = functions.filter_map(&:name).reject(&:empty?).uniq
       return "Running tools…" if names.empty?
-      "Running #{names.join(', ')}…"
+      "Running #{names.join(", ")}…"
     end
 
     def instructions

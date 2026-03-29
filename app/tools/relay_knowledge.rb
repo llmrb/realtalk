@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Relay::Tools
   ##
   # The {Relay::Tools::RelayKnowledge} tool provides the LLM
@@ -5,8 +7,8 @@ module Relay::Tools
   # This helps inform the LLM what about Relay is and what it does,
   # since it is unlikely to be heard of by an LLM.
   class RelayKnowledge < Base
-    name 'relay-knowledge'
-    description 'Returns Relay or llm.rb documentation so answers can cite project details'
+    name "relay-knowledge"
+    description "Returns Relay or llm.rb documentation so answers can cite project details"
     param :topic, Enum["relay", "llm.rb"], "The knowledge topic", required: true
 
     ##

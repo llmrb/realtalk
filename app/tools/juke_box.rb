@@ -30,11 +30,8 @@ module Relay::Tools
     end
 
     def jukebox
-      YAML.safe_load(
-        File.read(File.join(Relay.resources_dir, "jukebox.yml")),
-        permitted_classes: [],
-        aliases: false
-      )
+      YAML.safe_load_file(File.join(Relay.resources_dir, "jukebox.yml"), permitted_classes: [],
+                                                                         aliases: false)
     end
 
     def directions
