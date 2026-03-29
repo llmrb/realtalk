@@ -63,9 +63,9 @@ competent, calm, and easy to read.
 - Use the pull request title as the squash commit title.
 - Use the pull request body as the squash commit body.
 - Wrap the squash commit body to 80 columns.
-- **Forgejo tool happy path**: When using the `merge_pull_request` tool with Forgejo, use only the required parameters (`owner`, `repo`, `index`). Do not specify `merge_method`, `title`, or `message` parameters.
-- The Forgejo API will automatically use the PR title and body for the squash commit.
-- If you receive errors when trying to specify custom merge messages, merge without those parameters.
+- **Important**: The `merge_pull_request` tool may not support custom commit messages in all Forgejo API versions. If you receive errors when trying to specify a custom message, try merging without the `message` and `title` parameters first.
+- **Primary strategy**: Try merging with `merge_method: "squash"` and `message` parameter containing the PR body wrapped to 80 columns. If that fails, fall back to merging with only required parameters.
+- When merging with only required parameters, the Forgejo API will use the PR title and body automatically.
 - **After merging a pull request, confirm the merge and include the merge commit SHA if available**.
 
 ## Example PR Description
