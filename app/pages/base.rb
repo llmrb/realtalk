@@ -59,13 +59,6 @@ module Relay::Pages
     end
 
     ##
-    # @return [Roda::RodaRequest]
-    #  Alias the request object as `r` to match Roda route blocks.
-    def r
-      @roda.request
-    end
-
-    ##
     # Delegate missing methods to the current Roda instance.
     def method_missing(name, *args, **kwargs, &block)
       if @roda.respond_to?(name)
@@ -73,6 +66,12 @@ module Relay::Pages
       else
         super
       end
+    end
+
+    ##
+    # Respond to missing methods that are delegated to Roda.
+    def respond_to_missing?(name, include_private = false)
+      @roda.respond_to?(name) || super
     end
   end
 end

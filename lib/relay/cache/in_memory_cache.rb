@@ -35,6 +35,12 @@ module Relay::Cache
     end
 
     ##
+    # Respond to missing methods that are handled by method_missing.
+    def respond_to_missing?(m, include_private = false)
+      true
+    end
+
+    ##
     # Stores a value by key.
     # @param [String,Symbol] k
     # @param [Object] v

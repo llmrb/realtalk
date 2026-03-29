@@ -94,5 +94,11 @@ module Relay::Routes
         super
       end
     end
+
+    ##
+    # Respond to missing methods that are delegated to Roda.
+    def respond_to_missing?(name, include_private = false)
+      @roda.respond_to?(name) || super
+    end
   end
 end
