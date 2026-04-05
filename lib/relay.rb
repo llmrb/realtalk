@@ -58,6 +58,18 @@ module Relay
   end
 
   ##
+  # Reload Relay (useful in development enviroments)
+  # @param [Boolean] reload
+  # @return [Array<String>]
+  def self.reload
+    LLM::Tool.clear_registry!
+    Relay.loader.reload
+    Dir[File.join(tools_dir, "*.rb")].sort.each do |path|
+      load(path)
+    end
+  end
+
+  ##
   # Returns the path to the public/ directory
   # @return [String]
   def self.public_dir

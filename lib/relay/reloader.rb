@@ -23,7 +23,7 @@ module Relay
     private
 
     def reload!
-      Relay.loader.reload
+      Relay.reload
     end
   end
 end
