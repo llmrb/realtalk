@@ -34,6 +34,15 @@ module Relay::Models
     end
 
     ##
+    # Waits for queued tool work to finish.
+    # @param [Symbol] strategy
+    #  The concurrency strategy to use
+    # @return [Array<LLM::Function::Return>]
+    def wait(...)
+      ctx.wait(...)
+    end
+
+    ##
     # @return [LLM::Object]
     def usage
       LLM::Object.from(

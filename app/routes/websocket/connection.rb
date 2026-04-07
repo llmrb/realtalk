@@ -53,7 +53,7 @@ class Relay::Routes::Websocket
       write(conn, fragment(:append_message, message: vars[:messages][-1]))
       write(conn, fragment(:input))
       wait_with_heartbeat(conn, proc { talk(ctx, message, params) })
-      resolve_functions(ctx, ctx.functions, conn, params)
+      resolve_functions(ctx, conn, params)
       persist(ctx)
       write(conn, fragment(:status, status: "Ready", context_window: context_window(ctx), cost: format_cost(ctx.cost)))
     rescue LLM::NoSuchRegistryError, LLM::NoSuchModelError
@@ -85,13 +85,12 @@ class Relay::Routes::Websocket
     # @param [Async::WebSocket::Adapters::Rack] conn
     #  The WebSocket connection object
     # @return [void]
-    def resolve_functions(ctx, functions, conn, params)
-      return if functions.empty?
-      write(conn, fragment(:status, status: tool_status(functions)))
-      returns = wait_with_heartbeat(conn, functions.spawn(:task))
+    def resolve_functions(ctx, conn, params)
+      return if ctx.functions.empty?
+      returns = wait_with_heartbeat(conn, ctx.wait(:task))
       wait_with_heartbeat(conn, proc { ctx.talk(returns, params) })
       if ctx.functions.any?
-        resolve_functions(ctx, ctx.functions, conn, params)
+        resolve_functions(ctx, conn, params)
       end
     end
 
@@ -190,6 +189,8 @@ class Relay::Routes::Websocket
     def wait_with_heartbeat(conn, runner)
       runnable = if Proc === runner
         Async { runner.call }
+      elsif Array === runner
+        Async { runner }
       else
         runner
       end

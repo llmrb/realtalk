@@ -21,6 +21,16 @@ module Relay::Routes
       end || upgrade_required
     end
 
+    def tool_status(functions)
+      names = functions.filter_map(&:name).reject(&:empty?).uniq
+      return "Running tools…" if names.empty?
+      "Running #{names.join(", ")}…"
+    end
+
+    def report_tool_status(conn, tool)
+      write(conn, fragment(:status, status: tool_status([tool])))
+    end
+
     private
 
     ##
@@ -42,12 +52,6 @@ module Relay::Routes
       response["content-type"] = "text/plain"
       response["upgrade"] = "websocket"
       "Expected a WebSocket upgrade request\n"
-    end
-
-    def tool_status(functions)
-      names = functions.filter_map(&:name).reject(&:empty?).uniq
-      return "Running tools…" if names.empty?
-      "Running #{names.join(", ")}…"
     end
 
     def instructions
