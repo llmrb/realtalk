@@ -14,17 +14,13 @@ import { Timer } from "../js/jukebox/timer"
     const jukebox = Jukebox()
     const timer = Timer(document.getElementById("chatbot-status"))
     const scroll = Scroll(document.getElementById("chatbot-stream"))
-    const composer = document.getElementById("chat-composer")
-
     const syntaxHighlight = (el) =>{
       hljs.highlightElement(el)
     }
-
     const modifyAnchors = (el) =>{
       el.setAttribute("target", "_blank")
       el.setAttribute("rel", "noreferrer noopener")
     }
-
     const enhance = (root = document.body) => {
       root.querySelectorAll("pre code").forEach(syntaxHighlight)
       root.querySelectorAll("a").forEach(modifyAnchors)
@@ -32,7 +28,6 @@ import { Timer } from "../js/jukebox/timer"
       if (nodes.length > 0)
         jukebox.scanForMusic(nodes[nodes.length - 1])
     }
-
     document.body.addEventListener("htmx:oobAfterSwap", (event) => {
       const elt = event.detail.elt || event.target
       if (elt.id === "chatbot-status") {
@@ -41,18 +36,30 @@ import { Timer } from "../js/jukebox/timer"
         return
       }
       enhance(elt)
-      scroll?.follow()
+      scroll?.followIfNeeded()
     })
 
     document.body.addEventListener("htmx:afterSwap", (event) => {
       const elt = event.detail.elt || event.target
       enhance(elt)
+      scroll?.followIfNeeded()
     })
 
-    composer?.addEventListener("submit", () => {
+    document.body.addEventListener("submit", (event) => {
+      if (event.target.id !== "chat-composer")
+        return
       scroll?.force()
     })
-
+    document.body.addEventListener("focusin", (event) => {
+      if (!event.target.matches("#chat-composer textarea"))
+        return
+      scroll?.force()
+    })
+    document.body.addEventListener("input", (event) => {
+      if (!event.target.matches("#chat-composer textarea"))
+        return
+      scroll?.force()
+    })
     enhance()
     requestAnimationFrame(() => scroll?.force())
     window.addEventListener("load", () => scroll?.force(), { once: true })
