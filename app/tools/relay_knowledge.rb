@@ -45,7 +45,8 @@ module Relay::Tools
     def llmrb_resources
       {
         "readme"   => "https://raw.githubusercontent.com/llmrb/llm.rb/refs/heads/main/README.md",
-        "deepdive" => "https://raw.githubusercontent.com/llmrb/llm.rb/refs/heads/main/resources/deepdive.md"
+        "deepdive" => "https://raw.githubusercontent.com/llmrb/llm.rb/refs/heads/main/resources/deepdive.md",
+        "changelog" => "https://raw.githubusercontent.com/llmrb/llm.rb/refs/heads/main/CHANGELOG.md"
       }
     end
 
