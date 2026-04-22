@@ -1,3 +1,4 @@
+---
 - name: Dimitri Vegas & Like Mike vs W&W & Moguai
   title: Arcade Mammoth
   track: https://www.youtube-nocookie.com/embed/3Qq7kNjg-KY
@@ -25,17 +26,14 @@
 - name: Hozier
   title: Too sweet
   track: https://www.youtube-nocookie.com/embed/NTpbbQUBbuo
-- name: AWOLNATION
-  title: Sail
-  track: https://www.youtube-nocookie.com/embed/tgIqecROs5M
 - name: Cleffy
   title: Hide behind my disguise
   track: https://www.youtube-nocookie.com/embed/fGyUygO-ftM
 - name: MusicAI
-  title: ♠️ Банда за брата стреляет ♠️
+  title: "♠️ Банда за брата стреляет ♠️"
   track: https://www.youtube-nocookie.com/embed/O2qbf3YfJTs
 - name: MusicAI
-  title: ☆СУЕТА☆| Пацанский Трек 2026
+  title: "☆СУЕТА☆| Пацанский Трек 2026"
   track: https://www.youtube-nocookie.com/embed/F10tX7dNlUg
 - name: Мир В ЧерномБелом
   title: ТЫ УМРЕШЬ МОЛОДЫМ
@@ -59,7 +57,9 @@
   title: FENIAN
   track: https://www.youtube-nocookie.com/embed/PLDHQVJZuGQ
 - name: MUNDI OPUS
-  title: 𝐘𝐨𝐮 𝐚𝐫𝐞 𝐝𝐞𝐬𝐢𝐠𝐧𝐢𝐧𝐠 𝐝𝐫𝐞𝐚𝐦𝐬 | 𝐈𝐧𝐜𝐞𝐩𝐭𝐢𝐨𝐧 𝐒𝐨𝐮𝐧𝐝𝐭𝐫𝐚𝐜𝐤
+  title: "\U0001D418\U0001D428\U0001D42E \U0001D41A\U0001D42B\U0001D41E \U0001D41D\U0001D41E\U0001D42C\U0001D422\U0001D420\U0001D427\U0001D422\U0001D427\U0001D420
+    \U0001D41D\U0001D42B\U0001D41E\U0001D41A\U0001D426\U0001D42C | \U0001D408\U0001D427\U0001D41C\U0001D41E\U0001D429\U0001D42D\U0001D422\U0001D428\U0001D427
+    \U0001D412\U0001D428\U0001D42E\U0001D427\U0001D41D\U0001D42D\U0001D42B\U0001D41A\U0001D41C\U0001D424"
   track: https://www.youtube-nocookie.com/embed/wUWdIaaCvjg
 - name: Kansas
   title: Dust in the wind
@@ -88,3 +88,6 @@
 - name: Cage The Elephant
   title: Ready To Let Go
   track: https://www.youtube-nocookie.com/embed/fM1S9S-Q2sU
+- name: The Offspring
+  title: The kids aren't alright
+  track: https://www.youtube-nocookie.com/embed/s4P_gjrUnVw
