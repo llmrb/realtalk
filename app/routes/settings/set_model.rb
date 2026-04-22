@@ -6,17 +6,14 @@ module Relay::Routes
 
     def call
       set_model
-      partial("fragments/settings/set_model", locals:)
+      r.redirect("/")
     end
 
     private
 
     def set_model
       session["model"] = params["model"]
-    end
-
-    def locals
-      {user:, models: cache.models}
+      session.delete("context_id")
     end
   end
 end

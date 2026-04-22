@@ -1,0 +1,29 @@
+<div id="contexts-control" class="flex flex-col gap-2">
+  <span class="label">Saved Contexts</span>
+  <div class="scrollbar-chat h-64 overflow-y-auto pr-1">
+    <% if contexts.empty? %>
+      <div class="field theme-muted text-sm">No saved contexts for this provider yet.</div>
+    <% else %>
+      <form class="flex flex-col gap-2" action="/settings/set-context" method="post">
+        <% contexts.each do |context| %>
+          <% active = context.id == session["context_id"] %>
+          <label class="field flex cursor-pointer items-start gap-3 text-sm <%= "theme-strong" if active %>">
+            <input
+              type="radio"
+              name="context_id"
+              value="<%= context.id %>"
+              <%= "checked" if active %>
+              onchange="this.form.requestSubmit()"
+            >
+            <span class="flex min-w-0 flex-1 flex-col">
+              <span class="font-medium"><%= context.messages.size %> messages</span>
+            </span>
+          </label>
+        <% end %>
+      </form>
+    <% end %>
+  </div>
+  <form action="/settings/new-context" method="post">
+    <button class="w-full rounded-2xl border px-4 py-3 text-sm font-semibold transition hover:opacity-90 focus:outline-none focus:ring-4" style="border-color: var(--theme-accent-border); background-color: var(--theme-accent-soft); color: var(--theme-text); --tw-ring-color: color-mix(in srgb, var(--theme-accent) 16%, transparent);" type="submit">New Context</button>
+  </form>
+</div>

@@ -1,11 +1,13 @@
 <div id="providers-control" class="flex flex-col gap-2">
   <span class="label">Provider</span>
-  <select name="provider" class="select-field" hx-post="/settings/set-provider" hx-target="#models-control" hx-swap="outerHTML" hx-trigger="change from:select">
-    <option <%= "selected" if session["provider"] == "deepseek" %> value="deepseek">DeepSeek</option>
-    <option <%= "selected" if session["provider"] == "google" %> value="google">Google</option>
-    <option <%= "selected" if session["provider"] == "openai" %> value="openai">OpenAI</option>
-    <option <%= "selected" if session["provider"] == "anthropic" %> value="anthropic">Anthropic</option>
-    <option <%= "selected" if session["provider"] == "xai" %> value="xai">xAI</option>
-  </select>
+  <form action="/settings/set-provider" method="post">
+    <select class="select-field" name="provider" onchange="this.form.requestSubmit()">
+      <option <%= "selected" if session["provider"] == "deepseek" %> value="deepseek">DeepSeek</option>
+      <option <%= "selected" if session["provider"] == "google" %> value="google">Google</option>
+      <option <%= "selected" if session["provider"] == "openai" %> value="openai">OpenAI</option>
+      <option <%= "selected" if session["provider"] == "anthropic" %> value="anthropic">Anthropic</option>
+      <option <%= "selected" if session["provider"] == "xai" %> value="xai">xAI</option>
+    </select>
+  </form>
   <span class="theme-muted text-[11px]">5 providers available</span>
 </div>

@@ -13,7 +13,7 @@ import { Timer } from "../js/jukebox/timer"
   document.addEventListener("DOMContentLoaded", () => {
     const jukebox = Jukebox()
     const timer = Timer(document.getElementById("chatbot-status"))
-    const scroll = Scroll(document.getElementById("chatbot-stream"))
+    let scroll = Scroll(document.getElementById("chatbot-stream"))
     const syntaxHighlight = (el) =>{
       hljs.highlightElement(el)
     }
@@ -21,7 +21,15 @@ import { Timer } from "../js/jukebox/timer"
       el.setAttribute("target", "_blank")
       el.setAttribute("rel", "noreferrer noopener")
     }
+    const refreshScroll = () => {
+      const stream = document.getElementById("chatbot-stream")
+      if (!stream)
+        return
+      if (!scroll || scroll.parentEl !== stream)
+        scroll = Scroll(stream)
+    }
     const enhance = (root = document.body) => {
+      refreshScroll()
       root.querySelectorAll("pre code").forEach(syntaxHighlight)
       root.querySelectorAll("a").forEach(modifyAnchors)
       const nodes = root.querySelectorAll(".assistant-content")

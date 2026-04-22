@@ -11,7 +11,7 @@ module Relay::Routes
     def call
       set_provider
       set_model
-      partial("fragments/settings/set_provider", locals:)
+      r.redirect("/")
     end
 
     private
@@ -21,6 +21,7 @@ module Relay::Routes
     # @return [void]
     def set_provider
       session["provider"] = params["provider"]
+      session.delete("context_id")
     end
 
     ##
@@ -28,13 +29,6 @@ module Relay::Routes
     # @return [void]
     def set_model
       session["model"] = default_model
-    end
-
-    ##
-    # @return [Hash]
-    #   Returns template locals
-    def locals
-      {user:, models: cache.models}
     end
 
     ##

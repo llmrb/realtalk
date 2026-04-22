@@ -36,7 +36,20 @@ module Relay::Routes
     ##
     # @return [Relay::Models::Context]
     def ctx
-      @ctx ||= Context.find_or_create(user_id: user.id, provider:, model:)
+      @ctx ||= begin
+        context = current_context || default_context
+        sync_context!(context)
+      end
+    end
+
+    ##
+    # @return [Array<Relay::Models::Context>]
+    #  Saved contexts for the current user and provider, newest first.
+    def contexts
+      @contexts ||= Relay::Models::Context.where(user_id: user.id, provider:)
+        .reverse_order(:updated_at)
+        .all
+        .select { _1.messages.any? }
     end
 
     ##
@@ -83,6 +96,41 @@ module Relay::Routes
     # @return [Relay::InMemoryCache]
     def cache
       Relay.cache
+    end
+
+    ##
+    # @return [Array<LLM::Model>]
+    #  Chat-capable models for the current provider.
+    def chat_models
+      llm.models.all.select(&:chat?)
+    end
+
+    ##
+    # @return [Relay::Models::Context, nil]
+    #  The currently selected context for the session, if it matches the
+    #  current provider.
+    def current_context
+      return unless session["context_id"]
+
+      Relay::Models::Context.where(user_id: user.id, provider:, id: session["context_id"]).first
+    end
+
+    ##
+    # @return [Relay::Models::Context]
+    #  The default context for the current provider/model selection.
+    def default_context
+      Relay::Models::Context.where(user_id: user.id, provider:, model:)
+        .reverse_order(:updated_at)
+        .first || Relay::Models::Context.create(user_id: user.id, provider:, model:)
+    end
+
+    ##
+    # @param [Relay::Models::Context] context
+    # @return [Relay::Models::Context]
+    def sync_context!(context)
+      session["context_id"] = context.id
+      session["model"] = context[:model]
+      context
     end
 
     ##

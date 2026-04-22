@@ -41,6 +41,14 @@ module Relay
           Routes::Settings::SetModel.new(self).call
         end
 
+        r.is "set-context" do
+          Routes::Settings::SetContext.new(self).call
+        end
+
+        r.is "new-context" do
+          Routes::Settings::NewContext.new(self).call
+        end
+
         r.is "set-provider" do
           Routes::Settings::SetProvider.new(self).call
         end
@@ -61,6 +69,18 @@ module Relay
       r.is "providers" do
         r.get do
           Routes::ListProviders.new(self).call
+        end
+      end
+
+      r.is "controls" do
+        r.get do
+          Routes::ListControls.new(self).call
+        end
+      end
+
+      r.is "contexts" do
+        r.get do
+          Routes::ListContexts.new(self).call
         end
       end
 

@@ -12,7 +12,7 @@ module Relay::Pages
       response["content-type"] = "text/html"
       session["provider"] ||= "deepseek"
       session["model"] ||= "deepseek-chat"
-      page("chat", title: "Relay", messages: ctx.messages)
+      page("chat", title: "Relay", messages: ctx.messages, models: chat_models, contexts:)
     end
   end
 end

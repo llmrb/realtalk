@@ -14,17 +14,7 @@
       >
     </a>
     <% if show_controls %>
-      <form class="theme-strong flex w-full flex-col gap-4 text-sm">
-        <div id="providers-control" class="flex flex-col gap-2" hx-get="/providers" hx-trigger="load" hx-swap="outerHTML">
-          <span class="label">Provider</span>
-          <div class="field theme-muted">Loading...</div>
-        </div>
-        <div id="models-control" class="flex flex-col gap-2" hx-get="/models" hx-trigger="load" hx-swap="outerHTML">
-          <span class="label">Model</span>
-          <div class="theme-muted py-1 text-sm font-medium">Loading...</div>
-        </div>
-        <%== partial("fragments/themes") %>
-      </form>
+      <%== partial("fragments/controls", locals: {models:, contexts:}) %>
     <% end %>
   </div>
 </aside>

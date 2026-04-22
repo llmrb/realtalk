@@ -1,7 +1,7 @@
-<div id="models-control" class="flex flex-col gap-2">
+<div id="models-control" class="flex flex-col gap-2" hx-swap-oob="outerHTML">
   <span class="label">Model</span>
-  <form class="w-full" action="/settings/set-model" method="post">
-    <select class="select-field" name="model" onchange="this.form.requestSubmit()">
+  <form class="w-full" hx-post="/settings/set-model" hx-sync="#sidebar-controls:replace" hx-target="#models-control" hx-swap="outerHTML" hx-trigger="change from:select">
+    <select class="select-field" name="model">
       <% models.each do |model| %>
         <option
           <%= "selected" if model.id == session["model"] %>

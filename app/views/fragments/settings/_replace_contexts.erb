@@ -1,0 +1,26 @@
+<div id="contexts-control" class="flex flex-col gap-2" hx-swap-oob="outerHTML">
+  <span class="label">Saved Contexts</span>
+  <form hx-post="/settings/new-context" hx-sync="#sidebar-controls:replace" hx-target="#contexts-control" hx-swap="outerHTML">
+    <button class="composer-submit w-full" type="submit">New Context</button>
+  </form>
+  <% if contexts.empty? %>
+    <div class="field theme-muted text-sm">No saved contexts for this provider yet.</div>
+  <% else %>
+    <form class="flex flex-col gap-2" hx-post="/settings/set-context" hx-sync="#sidebar-controls:replace" hx-target="#contexts-control" hx-swap="outerHTML" hx-trigger="change from:input">
+      <% contexts.each do |context| %>
+        <% active = context.id == session["context_id"] %>
+        <label class="field flex cursor-pointer items-start gap-3 text-sm <%= "theme-strong" if active %>">
+          <input
+            type="radio"
+            name="context_id"
+            value="<%= context.id %>"
+            <%= "checked" if active %>
+          >
+          <span class="flex min-w-0 flex-1 flex-col">
+            <span class="font-medium"><%= context.messages.size %> messages</span>
+          </span>
+        </label>
+      <% end %>
+    </form>
+  <% end %>
+</div>

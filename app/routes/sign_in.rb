@@ -25,7 +25,7 @@ module Relay::Routes
     # Finds the user for the submitted email address
     # @return [Relay::Models::User, nil]
     def find_user
-      User.where(email: params["email"] || params["username"]).first
+      Relay::Models::User.where(email: params["email"] || params["username"]).first
     end
 
     ##

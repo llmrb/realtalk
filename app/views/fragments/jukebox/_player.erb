@@ -1,22 +1,28 @@
 <template id="tmpl-jukebox-player">
-  <div data-title="Jukebox" class="not-prose hidden mx-auto my-3 w-full max-w-2xl overflow-hidden border border-zinc-800 bg-zinc-900 text-zinc-100 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-    <div class="border-b border-zinc-800 bg-zinc-900 px-4 py-3">
-      <div class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-400/80">
-        Jukebox
+  <aside
+    id="jukebox"
+    data-title="Jukebox"
+    class="hidden w-full shrink-0 overflow-hidden lg:flex"
+  >
+    <div class="flex w-full flex-col overflow-hidden border border-zinc-800 bg-zinc-900 text-zinc-100 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <div class="border-b border-zinc-800 bg-zinc-900 px-4 py-3">
+        <div class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-400/80">
+          Jukebox
+        </div>
+        <div class="mt-1 text-sm font-medium text-zinc-100">
+          <span class="jukebox-title title"></span>
+        </div>
       </div>
-      <div class="mt-1 text-sm font-medium text-zinc-100">
-        <span class="jukebox-title title"></span>
+      <div class="jukebox-body aspect-video w-full bg-black">
+        <iframe
+          class="h-full w-full"
+          title="Jukebox"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
-    <div class="jukebox-body aspect-video w-full bg-black">
-      <iframe
-        class="h-full w-full"
-        title="Jukebox"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
-    </div>
-  </div>
+  </aside>
 </template>
