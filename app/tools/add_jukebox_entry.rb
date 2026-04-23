@@ -9,7 +9,7 @@ module Relay::Tools
     param :url, String, "A YouTube watch/share/embed URL", required: true
 
     def call(name:, title:, url:)
-      entry = JukeboxStore.add(name:, title:, track: url)
+      entry = jukebox.add(name:, title:, track: url)
       {
         message: "Added jukebox entry",
         entry:
@@ -18,6 +18,12 @@ module Relay::Tools
       {error: "invalid_entry", message: ex.message}
     rescue => ex
       {error: ex.class.to_s, message: ex.message}
+    end
+
+    private
+
+    def jukebox
+      @jukebox ||= Relay::Jukebox.new
     end
   end
 end

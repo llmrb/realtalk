@@ -4,12 +4,10 @@ require "cgi"
 require "uri"
 require "yaml"
 
-module Relay::Tools
-  module JukeboxStore
-    module_function
-
-    def path
-      File.join(Relay.resources_dir, "jukebox.yml")
+module Relay
+  class Jukebox
+    def initialize(path: File.join(Relay.resources_dir, "jukebox.yml"))
+      @path = path
     end
 
     def load
@@ -66,6 +64,10 @@ module Relay::Tools
       save(entries)
       entry
     end
+
+    private
+
+    attr_reader :path
 
     def extract_youtube_id(uri)
       path = uri.path.to_s

@@ -9,10 +9,10 @@ module Relay::Tools
     param :url, String, "Optional YouTube URL to narrow the match", required: false
 
     def call(name:, title: nil, url: nil)
-      removed = JukeboxStore.remove(
+      removed = jukebox.remove(
         name:,
         title: presence(title),
-        track: url && JukeboxStore.normalize_track(url)
+        track: url && jukebox.normalize_track(url)
       )
       if removed.zero?
         {message: "No jukebox entries matched the request", removed: 0}
@@ -26,6 +26,10 @@ module Relay::Tools
     end
 
     private
+
+    def jukebox
+      @jukebox ||= Relay::Jukebox.new
+    end
 
     def presence(value)
       text = value.to_s.strip

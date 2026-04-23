@@ -2,6 +2,7 @@
 
 module Relay
   require_relative "relay/cache"
+  require_relative "relay/jukebox"
   require_relative "relay/markdown"
   require_relative "relay/task_monitor"
   require_relative "relay/task"
