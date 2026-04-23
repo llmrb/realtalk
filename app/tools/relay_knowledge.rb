@@ -6,7 +6,9 @@ module Relay::Tools
   # with knowledge about Relay through its README documentation.
   # This helps inform the LLM what about Relay is and what it does,
   # since it is unlikely to be heard of by an LLM.
-  class RelayKnowledge < Base
+  class RelayKnowledge < LLM::Tool
+    include Relay::Tool
+
     name "relay-knowledge"
     description "Returns Relay or llm.rb documentation so answers can cite project details"
     param :topic, Enum["relay", "llm.rb"], "The knowledge topic", required: true

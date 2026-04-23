@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Relay::Tools
-  class RemoveJukeboxEntry < Base
+  class RemoveJukeboxEntry < LLM::Tool
+    include Relay::Tool
+
     name "remove-jukebox-entry"
     description "Removes one or more matching tracks from jukebox.yml"
     param :name, String, "The artist or performer name", required: true

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Relay::Tools
-  class CreateImage < Base
+  class CreateImage < LLM::Tool
+    include Relay::Tool
+
     name "create-image"
     description "Generates one or more images from a prompt and returns embeddable HTML"
     param :prompt, String, "The prompt", required: true

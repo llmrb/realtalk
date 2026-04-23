@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Relay::Tools
-  class AddJukeboxEntry < Base
+  class AddJukeboxEntry < LLM::Tool
+    include Relay::Tool
+
     name "add-jukebox-entry"
     description "Adds a new track to jukebox.yml from an artist, title, and YouTube link"
     param :name, String, "The artist or performer name", required: true

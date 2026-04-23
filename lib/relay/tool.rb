@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Relay::Tools
-  class Base < LLM::Tool
+module Relay
+  module Tool
     ##
     # Returns the root directory of the project
     # @return [String]

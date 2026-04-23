@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Relay::Tools
-  class Apropos < Base
+  class Apropos < LLM::Tool
+    include Relay::Tool
+
     name "apropos"
     description "Searches local apropos/man page indexes and returns matching FreeBSD man page entries"
     param :query, String, "The man page search query", required: true

@@ -7,7 +7,9 @@ module Relay::Tools
   # The {Relay::Tools::JukeBox} plays my favorite songs whenever
   # I'm bored. The jukebox is maintained by the resources/jukebox.yml
   # file and it can be edited to suit your own tastes.
-  class JukeBox < Base
+  class JukeBox < LLM::Tool
+    include Relay::Tool
+
     name "jukebox"
     description "Returns a small built-in playlist of playable music videos"
 
