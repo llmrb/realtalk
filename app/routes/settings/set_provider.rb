@@ -30,16 +30,5 @@ module Relay::Routes
     def set_model
       session["model"] = default_model
     end
-
-    ##
-    # @return [String]
-    #   Returns the default model
-    def default_model
-      case (llm = llms[provider]).name
-      when :openai then "gpt-5.4"
-      when :xai then "grok-3"
-      else llm.default_model
-      end
-    end
   end
 end

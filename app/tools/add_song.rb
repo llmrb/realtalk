@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Relay::Tools
-  class AddJukeboxEntry < LLM::Tool
+  class AddSong < LLM::Tool
     include Relay::Tool
 
-    name "add-jukebox-entry"
+    name "add-song"
     description "Adds a new track to jukebox.yml from an artist, title, and YouTube link"
     param :name, String, "The artist or performer name", required: true
     param :title, String, "The track title", required: true
@@ -16,10 +16,6 @@ module Relay::Tools
         message: "Added jukebox entry",
         entry:
       }
-    rescue ArgumentError => ex
-      {error: "invalid_entry", message: ex.message}
-    rescue => ex
-      {error: ex.class.to_s, message: ex.message}
     end
 
     private

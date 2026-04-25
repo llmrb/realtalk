@@ -1,23 +1,75 @@
-<form
-  id="chat-composer"
-  class="flex items-center gap-3 pt-1 pb-1"
+<div
+  id="chat-input"
+  class="space-y-2"
   hx-swap-oob="outerHTML"
-  hx-on::after-settle="this.querySelector('textarea')?.focus()"
-  ws-send
 >
-  <textarea
-    name="message"
-    rows="1"
-    class="composer-input"
-    placeholder="Type a message"
-    autocomplete="off"
-    autofocus
-    onkeydown="if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }"
-  ></textarea>
-  <button
-    class="composer-submit"
-    type="submit"
-  >
-    Send
-  </button>
-</form>
+  <% if pending_attachment_error %>
+    <div class="theme-strong text-sm"><%= pending_attachment_error %></div>
+  <% end %>
+  <% if pending_attachment %>
+    <div class="theme-strong flex items-center justify-between rounded-xl px-3 py-2 text-sm">
+      <div class="space-y-1">
+        <div>Attached: <%= pending_attachment["name"] %></div>
+        <div class="text-xs opacity-80">Will be sent with your next message.</div>
+      </div>
+      <form hx-post="/clear-attachment" hx-target="#chat-input" hx-swap="outerHTML">
+        <button class="composer-submit px-3 py-1 text-sm" type="submit">Remove</button>
+      </form>
+    </div>
+  <% end %>
+  <div class="flex items-center gap-3 pt-1 pb-1">
+    <div class="shrink-0">
+      <% if attachment_provider_supported? %>
+        <label for="file-upload-input" class="composer-submit flex cursor-pointer items-center px-3 py-2 text-sm">
+          Attach
+        </label>
+        <input
+          id="file-upload-input"
+          name="file"
+          type="file"
+          accept="<%= attachment_accept %>"
+          class="hidden"
+        >
+      <% else %>
+        <span class="composer-submit flex cursor-not-allowed items-center px-3 py-2 text-sm opacity-60">
+          Attach
+        </span>
+      <% end %>
+    </div>
+    <form
+      id="chat-composer"
+      class="flex min-w-0 flex-1 items-center gap-3"
+      hx-on::after-settle="this.querySelector('textarea')?.focus()"
+      ws-send
+    >
+      <% if pending_attachment %>
+        <input type="hidden" name="attachment_name" value="<%= pending_attachment["name"] %>">
+        <input type="hidden" name="attachment_path" value="<%= pending_attachment["path"] %>">
+        <input type="hidden" name="attachment_type" value="<%= pending_attachment["type"] %>">
+      <% end %>
+      <textarea
+        name="message"
+        rows="1"
+        class="composer-input"
+        placeholder="Type a message"
+        autocomplete="off"
+        autofocus
+        onkeydown="if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.requestSubmit(); }"
+      ></textarea>
+      <button
+        class="composer-submit"
+        type="submit"
+      >
+        Send
+      </button>
+    </form>
+  </div>
+  <% unless attachment_provider_supported? %>
+    <div class="theme-muted text-xs">
+      Attachments are not supported for <%= session["provider"] || "deepseek" %>.
+    </div>
+  <% end %>
+  <div id="file-upload-indicator" class="upload-indicator text-xs">
+    Uploading attachment...
+  </div>
+</div>

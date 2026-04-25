@@ -35,20 +35,23 @@ module Relay
       raise ArgumentError, "invalid YouTube URL"
     end
 
-    def remove(name:, title: nil, track: nil)
+    def remove(name: nil, title: nil, track: nil)
       entries = load
-      before = entries.length
-      normalized_name = normalize_text(name)
+      normalized_name = name && normalize_text(name)
       normalized_title = title && normalize_text(title)
       normalized_track = track && normalize_track(track)
+      raise ArgumentError, "name, title, or track is required" unless [normalized_name, normalized_title, normalized_track].any?
+      removed = []
       entries.reject! do |entry|
-        next false unless normalize_text(entry["name"]) == normalized_name
-        next false if normalized_title && normalize_text(entry["title"]) != normalized_title
-        next false if normalized_track && normalize_track(entry["track"]) != normalized_track
-        true
+        matched = true
+        matched &&= normalize_text(entry["name"]) == normalized_name if normalized_name
+        matched &&= normalize_text(entry["title"]) == normalized_title if normalized_title
+        matched &&= normalize_track(entry["track"]) == normalized_track if normalized_track
+        removed << entry if matched
+        matched
       end
-      save(entries) if entries.length != before
-      before - entries.length
+      save(entries) unless removed.empty?
+      {removed: removed.length, entries: removed}
     end
 
     def add(name:, title:, track:)

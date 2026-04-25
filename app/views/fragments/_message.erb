@@ -1,13 +1,27 @@
-<% if message[:role] == :user %>
+<%
+  role = message.respond_to?(:role) ? message.role.to_sym : message[:role]
+  content = message.respond_to?(:content) ? message.content : message[:content]
+%>
+<% if role == :user %>
   <div class="mt-3 flex justify-end first:mt-0">
     <div class="chat-bubble-user w-fit max-w-[75%] [&_*]:text-inherit">
-      <div class="assistant-content"><%== markdown(message[:content]) %></div>
+      <div class="assistant-content space-y-2">
+        <% Array(content).each do |part| %>
+          <% if String === part && !part.empty? %>
+            <div><%== markdown(part) %></div>
+          <% elsif defined?(LLM::Object) && LLM::Object === part && part.kind == :local_file %>
+            <div class="rounded-lg border border-current/20 px-3 py-2 text-sm">
+              PDF: <%= File.basename(part.value.path) %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% else %>
   <div class="mt-3 flex first:mt-0">
     <div class="assistant-content chat-bubble-assistant w-fit max-w-[85%]">
-      <div><%== markdown(message[:content]) %></div>
+      <div><%== markdown(content) %></div>
     </div>
   </div>
 <% end %>

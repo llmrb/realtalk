@@ -13,9 +13,10 @@ module Relay::Routes
     def call
       Async::WebSocket::Adapters::Rack.open(request.env) do |conn|
         mcps.each(&:start)
+        context = ctx
         stream = Stream.new(conn, self)
-        params = {model:, stream:, tools:}
-        on_connect conn, llm, ctx, params
+        params = {model: context[:model], stream:, tools:}
+        on_connect conn, context.llm, context, params
       ensure
         mcps.each(&:stop)
       end || upgrade_required
@@ -61,7 +62,7 @@ module Relay::Routes
     def initial_prompt(message)
       LLM::Prompt.new(llm) do
         _1.system instructions
-        _1.user message
+        _1.user(Array === message ? message : message.to_s)
       end
     end
 

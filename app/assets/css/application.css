@@ -182,6 +182,15 @@
     color: var(--theme-muted);
   }
 
+  .upload-indicator {
+    @apply hidden;
+    color: var(--theme-muted);
+  }
+
+  .upload-indicator.is-active {
+    @apply block;
+  }
+
   .assistant-content {
     @apply max-w-none whitespace-normal leading-7;
   }

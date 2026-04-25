@@ -7,6 +7,7 @@ module Relay
   require_relative "relay/markdown"
   require_relative "relay/task_monitor"
   require_relative "relay/task"
+  require_relative "relay/pending_attachment"
   require_relative "relay/tool"
   require_relative "relay/model"
   require_relative "relay/reloader"

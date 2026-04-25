@@ -44,15 +44,17 @@ class Relay::Routes::Websocket
     # @param [String] message
     #  The incoming message
     # @return [void]
-    def on_message(conn, ctx, message, params)
-      return if message.to_s.empty?
-      vars[:messages].concat [{role: :user, content: message}, {role: :assistant, content: +""}]
+    def on_message(conn, ctx, payload, params)
+      attachment = attachment_from_payload(payload) || consume_pending_attachment
+      prompt = build_prompt(ctx, payload["message"], attachment)
+      return if prompt.empty?
+      vars[:messages].concat [{role: :user, content: prompt}, {role: :assistant, content: +""}]
       write(conn, fragment(:status, status: "Thinking..."))
       write(conn, fragment(:remove_empty_state)) if vars[:messages].length == 2
       write(conn, fragment(:append_message, message: vars[:messages][-2]))
       write(conn, fragment(:append_message, message: vars[:messages][-1]))
       write(conn, fragment(:input))
-      wait_with_heartbeat(conn, proc { talk(ctx, message, params) })
+      wait_with_heartbeat(conn, proc { talk(ctx, prompt, params) })
       resolve_functions(ctx, conn, params)
       write(conn, fragment(:status, status: "Ready", context_window: context_window(ctx), cost: format_cost(ctx.cost)))
       @contexts = nil
@@ -71,11 +73,11 @@ class Relay::Routes::Websocket
     # @param [String] message
     #  The message to send
     # @return [void]
-    def talk(ctx, message, params)
+    def talk(ctx, prompt, params)
       if ctx.messages.empty?
-        ctx.talk initial_prompt(message), params
+        ctx.talk initial_prompt(prompt), params
       else
-        ctx.talk(message, params)
+        ctx.talk(prompt, params)
       end
     end
 
@@ -136,8 +138,11 @@ class Relay::Routes::Websocket
     # @return [Hash]
     #  The current token usage, maximum window, and display label
     def context_window(sess)
-      used, max = sess.usage.total_tokens || 0,  sess.context_window || 0
+      used = sess.usage.total_tokens || 0
+      max = sess.context_window || 0
       {used:, max:, label: "#{used} / #{max} tokens"}
+    rescue LLM::NoSuchModelError, LLM::NoSuchRegistryError
+      {used: 0, max: 0, label: "0 / 0 tokens"}
     end
 
     ##
@@ -149,6 +154,8 @@ class Relay::Routes::Websocket
     def format_cost(cost)
       return "unknown" if cost == "unknown"
       "$#{cost}"
+    rescue LLM::NoSuchModelError, LLM::NoSuchRegistryError
+      "unknown"
     end
 
     ##
@@ -158,10 +165,9 @@ class Relay::Routes::Websocket
     # @return [String]
     #  The message text, or an empty string if parsing fails
     def parse_message(message)
-      buffer = JSON.parse(message.buffer)
-      buffer["message"]
+      JSON.parse(message.buffer)
     rescue JSON::ParserError
-      ""
+      {}
     end
 
     ##
@@ -196,6 +202,25 @@ class Relay::Routes::Websocket
 
     def pause(seconds)
       Async::Task.current.sleep(seconds)
+    end
+
+    def build_prompt(ctx, message, attachment)
+      text = message.to_s.strip
+      return text if attachment.nil?
+      parts = []
+      parts << text unless text.empty?
+      parts << ctx.local_file(attachment["path"])
+      parts
+    end
+
+    def attachment_from_payload(payload)
+      path = payload["attachment_path"].to_s
+      return if path.empty? || !File.file?(path)
+      {
+        "name" => payload["attachment_name"].to_s,
+        "path" => path,
+        "type" => payload["attachment_type"].to_s
+      }
     end
   end
 end

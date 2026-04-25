@@ -2,6 +2,8 @@
 
 module Relay
   class Router < Roda
+    include Relay::PendingAttachment
+
     ##
     # Plugins
     plugin :common_logger
@@ -87,6 +89,18 @@ module Relay
       r.is "tools" do
         r.get do
           Routes::ListTools.new(self).call
+        end
+      end
+
+      r.is "upload-attachment" do
+        r.post do
+          Routes::UploadAttachment.new(self).call
+        end
+      end
+
+      r.is "clear-attachment" do
+        r.post do
+          Routes::ClearAttachment.new(self).call
         end
       end
     end

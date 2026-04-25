@@ -18,14 +18,20 @@ module Relay::Tools
         else
           {query:, matches:, directions:}
         end
-      elsif command.not_found?
-        {error: "apropos_not_found", message: "The apropos command is not available on this system"}
       else
-        {error: "apropos_failed", message: command.stderr.to_s.strip}
+        raise_apropos_error(command)
       end
     end
 
     private
+
+    def raise_apropos_error(command)
+      if command.not_found?
+        raise "The apropos command is not available on this system"
+      else
+        raise(command.stderr.to_s.strip.empty? ? "apropos failed" : command.stderr.to_s.strip)
+      end
+    end
 
     def normalize_limit(limit)
       [[limit.to_i, 1].max, 25].min

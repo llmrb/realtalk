@@ -6,6 +6,7 @@ window.htmx = htmx
 require("htmx-ext-ws")
 
 import { Jukebox } from "../js/jukebox"
+import { FileUpload } from "../js/file_upload"
 import { Scroll } from "../js/scroll"
 import { Timer } from "../js/jukebox/timer"
 
@@ -36,6 +37,7 @@ import { Timer } from "../js/jukebox/timer"
       if (nodes.length > 0)
         jukebox.scanForMusic(nodes[nodes.length - 1])
     }
+    const fileUpload = FileUpload({afterUpload: enhance})
     document.body.addEventListener("htmx:oobAfterSwap", (event) => {
       const elt = event.detail.elt || event.target
       if (elt.id === "chatbot-status") {
@@ -56,6 +58,8 @@ import { Timer } from "../js/jukebox/timer"
     document.body.addEventListener("submit", (event) => {
       if (event.target.id !== "chat-composer")
         return
+      if (fileUpload.blockSubmit(event))
+        return
       scroll?.force()
     })
     document.body.addEventListener("focusin", (event) => {
@@ -67,6 +71,11 @@ import { Timer } from "../js/jukebox/timer"
       if (!event.target.matches("#chat-composer textarea"))
         return
       scroll?.force()
+    })
+    document.body.addEventListener("change", (event) => {
+      if (!event.target.matches("#file-upload-input"))
+        return
+      fileUpload.upload(event.target.files?.[0])
     })
     enhance()
     requestAnimationFrame(() => scroll?.force())

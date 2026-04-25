@@ -5,6 +5,7 @@ module Relay::Pages
   # Base class for full-page renderers.
   class Base
     include Relay::Models
+    include Relay::PendingAttachment
 
     ##
     # @param [Roda] roda
@@ -24,7 +25,7 @@ module Relay::Pages
     # @return [String]
     #  The requested model, defaulting to deepseek-chat
     def model
-      session["model"] || "deepseek-chat"
+      session["model"] = normalize_model(session["model"])
     end
 
     ##
@@ -44,6 +45,7 @@ module Relay::Pages
       @contexts ||= Relay::Models::Context.where(user_id: user.id, provider:)
         .reverse_order(:updated_at)
         .all
+        .select { valid_model?(_1[:model]) }
         .select { _1.messages.any? }
     end
 
@@ -52,7 +54,10 @@ module Relay::Pages
     def current_context
       return unless session["context_id"]
 
-      Relay::Models::Context.where(user_id: user.id, provider:, id: session["context_id"]).first
+      context = Relay::Models::Context.where(user_id: user.id, provider:, id: session["context_id"]).first
+      return context if context && valid_model?(context[:model])
+      session.delete("context_id")
+      nil
     end
 
     ##
@@ -68,7 +73,7 @@ module Relay::Pages
     # @return [Relay::Models::Context]
     def sync_context!(context)
       session["context_id"] = context.id
-      session["model"] = context[:model]
+      session["model"] = normalize_model(context[:model])
       context
     end
 
@@ -88,6 +93,27 @@ module Relay::Pages
     # @return [Array<LLM::Model>]
     def chat_models
       llms.fetch(provider).models.all.select(&:chat?)
+    end
+
+    ##
+    # @return [String]
+    #  Returns the default chat model for the current provider.
+    def default_model
+      case (provider = llms.fetch(self.provider)).name
+      when :deepseek then "deepseek-v4-flash"
+      when :openai then "gpt-5.4"
+      when :xai then "grok-3"
+      else provider.default_model
+      end
+    end
+
+    def valid_model?(id)
+      chat_models.any? { _1.id == id }
+    end
+
+    def normalize_model(id)
+      return id if id && valid_model?(id)
+      default_model
     end
 
     ##

@@ -12,7 +12,7 @@ namespace :dev do
 
   desc "Serve the server"
   task :server do
-    sh "env $(cat .env) " \
+    sh "env RACK_MULTIPART_BUFFERED_UPLOAD_BYTESIZE_LIMIT=67108864 $(cat .env) " \
        "bundle exec falcon serve --bind http://0.0.0.0:9292"
   end
 

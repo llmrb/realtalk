@@ -27,6 +27,18 @@ module Relay::Models
       end
     end
 
+    def cost
+      super
+    rescue LLM::NoSuchModelError, LLM::NoSuchRegistryError
+      "unknown"
+    end
+
+    def context_window
+      super
+    rescue LLM::NoSuchModelError, LLM::NoSuchRegistryError
+      0
+    end
+
     private
 
     def set_provider
