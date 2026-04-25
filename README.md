@@ -90,24 +90,25 @@ Relay is a good fit if you want to:
 
 ### Workspace
 
-- 🌊 Streaming chat over WebSockets
-- 🤖 Multiple provider support: OpenAI, Google, Anthropic, DeepSeek, xAI
-- 🛠️ Add your own tools to [app/tools/](app/tools)
-- 🧪 Sample tools: [create_image.rb](./app/tools/create_image.rb), [relay_knowledge.rb](./app/tools/relay_knowledge.rb), [juke_box.rb](./app/tools/juke_box.rb)
-- 🔌 Optional MCP server support via [app/config/mcp.yml.sample](app/config/mcp.yml.sample)
-- 💾 Persistent chat context by provider and model
-- 🔐 User authentication with session-backed sign-in
+- Streaming chat over WebSockets with server-rendered updates
+- Multiple provider support: OpenAI, Google, Anthropic, DeepSeek, and xAI
+- Saved chat contexts with provider-aware switching and new-context creation
+- Attachment support for providers that accept local files through `llm.rb`
+- Built-in tool support plus automatic loading of custom tools from [app/tools/](app/tools)
+- Optional MCP server integration via [app/config/mcp.yml.sample](app/config/mcp.yml.sample)
+- Session-backed sign-in and per-user persistent context
+- A jukebox sidebar with tool-driven playlist management
 
 ### Platform
 
-- ⚙️ Rack application built with Falcon, Roda, and async-websocket
-- 🗃️ Sequel with built-in migrations
-- 🧵 Sidekiq workers for background jobs
-- 🧰 Built-in task monitor that supervises the full dev environment: web, workers, assets
-- 🗂️  Session support through Roda's session plugin
-- ⚡ In-memory cache support via `Relay.cache`
-- 🔐 Automatic `.env` loading during app boot
-- ♻️ Zeitwerk hot reloading in development
+- Rack application built with Falcon, Roda, and async-websocket
+- Sequel models and migrations for application state
+- Sidekiq workers for background jobs
+- A built-in task monitor for the local development stack: web, workers, and assets
+- Session support through Roda's session plugin
+- In-memory shared state via `Relay.cache`
+- Automatic `.env` loading during boot
+- Zeitwerk hot reloading in development
 
 ## Cost considerations
 
@@ -135,16 +136,19 @@ performance.
 
 **Tools**
 
-Relay ships with a small set of built-in tools in [`app/tools/`](app/tools):
+Relay ships with built-in tools in [`app/tools/`](app/tools):
 
 - [`create_image.rb`](./app/tools/create_image.rb) generates images
 - [`relay_knowledge.rb`](./app/tools/relay_knowledge.rb) exposes project documentation
-- [`juke_box.rb`](./app/tools/juke_box.rb) provides a built-in playlist for the chat UI
+- [`juke_box.rb`](./app/tools/juke_box.rb) reads from the built-in playlist
+- [`add_song.rb`](./app/tools/add_song.rb) adds songs to the jukebox playlist
+- [`remove_song.rb`](./app/tools/remove_song.rb) removes songs from the jukebox playlist
+- [`apropos.rb`](./app/tools/apropos.rb) searches FreeBSD man pages with `apropos`
 
 These tools serve as examples of how to extend Relay's behavior. They
-show common patterns such as calling external providers, returning
-documentation-backed knowledge, and rendering structured tool output in
-the interface.
+show common patterns such as calling external providers, editing local
+application data, returning documentation-backed knowledge, invoking
+system commands, and rendering structured tool output in the interface.
 
 To add your own behavior, create additional tools under `app/tools/`.
 Relay loads registered tools automatically, so new tools become
