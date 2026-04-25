@@ -7,6 +7,8 @@ contexts, and streaming conversations, and works both as a practical
 self-hosted workspace and as a reference app for exploring how AI
 products can be put together and extended over time.
 
+![Relay screenshot](https://img.youtube.com/vi/Jb7LNUYlCf4/maxresdefault.jpg)
+
 ## Quick start
 
 If you just want Relay running locally, this is the shortest path.
@@ -66,10 +68,6 @@ Then open Relay in your browser and sign in with the seeded account.
 During development, Relay enables Zeitwerk reloading and refreshes
 autoloaded constants between requests, so changes under `app/` are
 picked up without restarting the web server.
-
-## Screencast
-
-[![Watch the Relay screencast](https://img.youtube.com/vi/Jb7LNUYlCf4/maxresdefault.jpg)](https://www.youtube.com/watch?v=x1K4wMeO_QA)
 
 ## Why Relay?
 
