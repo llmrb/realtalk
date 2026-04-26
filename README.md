@@ -226,6 +226,7 @@ Some important notes:
 
 The codebase is organized by responsibility:
 
+- `app/concerns` contains reusable modules shared across routes, pages, and views
 - `app/init` contains boot and framework setup
 - `app/hooks` contains reusable request hooks
 - `app/pages` contains full-page renderers

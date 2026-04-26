@@ -2,7 +2,7 @@
 
 module Relay
   class Router < Roda
-    include Relay::PendingAttachment
+    include Relay::Concerns::Attachment
 
     ##
     # Plugins

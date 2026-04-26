@@ -4,8 +4,8 @@ require "fileutils"
 require "securerandom"
 require "stringio"
 
-module Relay
-  module PendingAttachment
+module Relay::Concerns
+  module Attachment
     IMAGE_EXTENSIONS = %w[.png .jpg .jpeg .gif .webp .bmp .tiff .tif .heic .heif].freeze
 
     def pending_attachment
@@ -88,7 +88,7 @@ module Relay
     end
 
     def sanitize_filename(filename)
-      File.basename(filename.to_s).gsub(/[^A-Za-z0-9.\-_]/, "_")
+      File.basename(filename.to_s).gsub(/[^A-Za-z0-9._-]/, "_")
     end
   end
 end
