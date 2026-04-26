@@ -45,8 +45,8 @@ class Relay::Routes::Websocket
     #  The incoming message
     # @return [void]
     def on_message(conn, ctx, payload, params)
-      attachment = attachment_from_payload(payload) || consume_pending_attachment
-      prompt = build_prompt(ctx, payload["message"], attachment)
+      file = attachment_from_payload(payload) || attachment.consume
+      prompt = build_prompt(ctx, payload["message"], file)
       return if prompt.empty?
       vars[:messages].concat [{role: :user, content: prompt}, {role: :assistant, content: +""}]
       write(conn, fragment(:status, status: "Thinking..."))
@@ -204,23 +204,23 @@ class Relay::Routes::Websocket
       Async::Task.current.sleep(seconds)
     end
 
-    def build_prompt(ctx, message, attachment)
+    def build_prompt(ctx, message, file)
       text = message.to_s.strip
-      return text if attachment.nil?
+      return text if file.nil?
       parts = []
       parts << text unless text.empty?
-      parts << ctx.local_file(attachment["path"])
+      parts << ctx.local_file(file.path)
       parts
     end
 
     def attachment_from_payload(payload)
       path = payload["attachment_path"].to_s
       return if path.empty? || !File.file?(path)
-      {
-        "name" => payload["attachment_name"].to_s,
-        "path" => path,
-        "type" => payload["attachment_type"].to_s
-      }
+      Relay::Attachment.new(
+        name: payload["attachment_name"],
+        path:,
+        type: payload["attachment_type"]
+      )
     end
   end
 end

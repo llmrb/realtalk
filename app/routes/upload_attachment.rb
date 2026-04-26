@@ -7,13 +7,13 @@ module Relay::Routes
     prepend Relay::Hooks::RequireUser
 
     def call
-      raise ArgumentError, unsupported_attachment_message unless attachment_type_supported?(filename:, type:)
-      attach_file io: request.body, filename:, type:
+      raise ArgumentError, attachment.unsupported_message unless attachment.type_supported?(filename:, type:)
+      attachment.attach(io: request.body, filename:, type:)
       response.status = 200
       response["content-type"] = "text/html"
       partial("fragments/input")
     rescue ArgumentError => e
-      session["pending_attachment_error"] = e.message
+      attachment.error = e.message
       response.status = 422
       response["content-type"] = "text/html"
       partial("fragments/input")

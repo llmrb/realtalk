@@ -5,7 +5,7 @@ module Relay::Routes
     prepend Relay::Hooks::RequireUser
 
     def call
-      clear_pending_attachment
+      attachment.clear
       response["content-type"] = "text/html"
       partial("fragments/input")
     end

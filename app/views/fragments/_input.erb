@@ -3,13 +3,14 @@
   class="space-y-2"
   hx-swap-oob="outerHTML"
 >
-  <% if pending_attachment_error %>
-    <div class="theme-strong text-sm"><%= pending_attachment_error %></div>
+  <% file = attachment.file %>
+  <% if attachment.error %>
+    <div class="theme-strong text-sm"><%= attachment.error %></div>
   <% end %>
-  <% if pending_attachment %>
+  <% if file.attached? %>
     <div class="theme-strong flex items-center justify-between rounded-xl px-3 py-2 text-sm">
       <div class="space-y-1">
-        <div>Attached: <%= pending_attachment["name"] %></div>
+        <div>Attached: <%= file.name %></div>
         <div class="text-xs opacity-80">Will be sent with your next message.</div>
       </div>
       <form hx-post="/clear-attachment" hx-target="#chat-input" hx-swap="outerHTML">
@@ -19,7 +20,7 @@
   <% end %>
   <div class="flex items-center gap-3 pt-1 pb-1">
     <div class="shrink-0">
-      <% if attachment_provider_supported? %>
+      <% if attachment.supported? %>
         <label for="file-upload-input" class="composer-submit flex cursor-pointer items-center px-3 py-2 text-sm">
           Attach
         </label>
@@ -27,7 +28,7 @@
           id="file-upload-input"
           name="file"
           type="file"
-          accept="<%= attachment_accept %>"
+          accept="<%= attachment.accept %>"
           class="hidden"
         >
       <% else %>
@@ -42,10 +43,10 @@
       hx-on::after-settle="this.querySelector('textarea')?.focus()"
       ws-send
     >
-      <% if pending_attachment %>
-        <input type="hidden" name="attachment_name" value="<%= pending_attachment["name"] %>">
-        <input type="hidden" name="attachment_path" value="<%= pending_attachment["path"] %>">
-        <input type="hidden" name="attachment_type" value="<%= pending_attachment["type"] %>">
+      <% if file.attached? %>
+        <input type="hidden" name="attachment_name" value="<%= file.name %>">
+        <input type="hidden" name="attachment_path" value="<%= file.path %>">
+        <input type="hidden" name="attachment_type" value="<%= file.type %>">
       <% end %>
       <textarea
         name="message"
@@ -64,7 +65,7 @@
       </button>
     </form>
   </div>
-  <% unless attachment_provider_supported? %>
+  <% unless attachment.supported? %>
     <div class="theme-muted text-xs">
       Attachments are not supported for <%= session["provider"] || "deepseek" %>.
     </div>
