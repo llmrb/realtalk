@@ -56,7 +56,7 @@ module Relay::Models
     private
 
     def set_provider
-      {key: ENV["#{provider.upcase}_SECRET"], persistent: true}
+      LLM.method(provider).call(key: ENV["#{provider.upcase}_SECRET"], persistent: true)
     end
 
     def set_tracer
@@ -65,9 +65,7 @@ module Relay::Models
     end
 
     def set_context
-      {
-        compactor: { message_threshold: nil, retention_window: 8 }
-      }
+      { model: self[:model], compactor: { retention_window: 8 } }
     end
   end
 end
