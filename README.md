@@ -5,16 +5,6 @@ with your own tools and skills that live in your `${HOME}` directory.
 It is for programmers, AI engineers, hackers, and anyone who wants
 their own AI environment with the option to extend it with code.
 
-## Features
-
-* Setup is fast enough that you can be chatting in a couple of minutes
-* Self-host it and keep each user's chats and MCP settings isolated
-* Use the model providers you want: DeepSeek, OpenAI, xAI, zAI, AWS Bedrock, Anthropic, and Google
-* Plug into MCP servers and give the assistant access to real systems like GitHub, Forgejo, etc
-* Add your own tools and shape the assistant around your workflow instead of someone else's
-* Cancel long-running requests and tool calls without leaving the app in a weird state
-* Run tools concurrently when one step at a time is too slow
-* Built on a small Ruby stack that is easy to understand, extend, and run yourself
 
 ## How easy is it to setup?
 
@@ -57,8 +47,9 @@ relay start
 
 ![Relay screenshot](./relay2.png)
 
+## Tools
 
-## How do I add my own tool?
+### How do I add my own tool?
 
 Before running `relay start` you should add `~/.config/relay/tools/<yourtool>.rb`.
 The tool will be automatically made available to the LLM. This is how a tool
@@ -80,7 +71,7 @@ class Shell < LLM::Tool
 end
 ```
 
-## Wait, what is a tool?
+### Wait, what is a tool?
 
 A tool contains a name, a description, and optional parameters. It is attached
 to a method, and that method that can be called. The model or LLM decides when
@@ -91,7 +82,7 @@ you can think of. They're a powerful way to extend the capabilities of an LLM.
 An MCP server can also expose pre-packaged tools, and those can be especially
 powerful for talking to GitHub or your own Forgejo instance.
 
-## What are the default tools?
+### What are the default tools?
 
 The `relay-knowledge` tool returns documentation for both Relay
 and [llm.rb](https://github.com/llmrb/llm.rb) - ask about either
@@ -104,14 +95,15 @@ can be played inline in the chat, and you can also add your own
 songs or remove existing ones through the same tools. The only
 requirement is that it is a YouTube URL.
 
-## What provider is the best value?
+### Costs
 
-DeepSeek. I highly recommend it. The context window is 1M. I have been using it
-all the time - especially for Relay development, and despite my heavy usage, it
-cost only 80 cents overall. It's almost free. I used it **a lot**. I'd estimate
-that a 1M context window costs 14 cents or so.
+### What provider is the best value?
 
-## What about Ollama and friends?
+DeepSeek. <br>
+Hard to beat it on price. <br>
+Recent models have a context window of 1M.
+
+### What about self-hosting with Ollama ?
 
 [llm.rb](https://github.com/llmrb/llm.rb#readme) provides support ollama, llama.cpp,
 and any OpenAI-compatible endpoint. But Relay does not surface it as a feature. I haven't
