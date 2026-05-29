@@ -6,9 +6,10 @@ module Relay::Tools
 
     name "add-song"
     description "Adds a new track from an artist, title, and YouTube link"
-    param :name, String, "The artist or performer name", required: true
-    param :title, String, "The track title", required: true
-    param :url, String, "A YouTube watch/share/embed URL", required: true
+    parameter :name, String, "The artist or performer name"
+    parameter :title, String, "The track title"
+    parameter :url, String, "A YouTube watch/share/embed URL"
+    required %i[name title url]
 
     def call(name:, title:, url:)
       entry = jukebox.add(name:, title:, track: url)

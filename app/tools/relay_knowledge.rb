@@ -10,8 +10,8 @@ module Relay::Tools
     include Relay::Tool
 
     name "relay-knowledge"
-    description "Returns Relay, llm.rb or mruby-llm documentation"
-    parameter :topic, Enum["relay", "llm.rb", "mruby-llm"], "The knowledge topic"
+    description "Provides information about various topics related to the llm.rb ecosystem"
+    parameter :topic, Enum["relay", "llm.rb", "mruby-llm", "wasm-llm", "rails-llm", "robert"], "The knowledge topic"
     required %i[topic]
 
     ##
@@ -21,7 +21,10 @@ module Relay::Tools
       case topic
       when "relay" then {directions:, documentation: fetch(relay_resources)}
       when "llm.rb" then {directions:, documentation: fetch(llmrb_resources)}
+      when "wasm-llm" then {directions:, documentation: fetch(wasmllm_resources)}
       when "mruby-llm" then {directions:, documentation: fetch(mruby_llm_resources)}
+      when "rails-llm" then {directions:, documentation: fetch(rails_llm_resources)}
+      when "robert" then {directions:, documentation: fetch(robert_resources)}
       else {error: "unknown topic: #{topic}"}
       end
     end
@@ -50,6 +53,24 @@ module Relay::Tools
     def mruby_llm_resources
       {
         "readme" => "https://raw.githubusercontent.com/llmrb/mruby-llm/refs/heads/main/README.md"
+      }
+    end
+
+    def rails_llm_resources
+      {
+        "readme" => "https://raw.githubusercontent.com/llmrb/rails-llm/refs/heads/main/README.md"
+      }
+    end
+
+    def wasmllm_resources
+      {
+        "readme" => "https://raw.githubusercontent.com/llmrb/wasm-llm/refs/heads/main/README.md"
+      }
+    end
+
+    def robert_resources
+      {
+        "readme" => "https://raw.githubusercontent.com/llmrb/robert/refs/heads/main/README.md"
       }
     end
 
